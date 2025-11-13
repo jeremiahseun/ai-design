@@ -1,0 +1,19 @@
+# Core PyTorch for Apple Silicon (MPS)
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Numerical Computing
+numpy>=1.24.0
+
+# Computer Vision & Image Processing
+opencv-python>=4.8.0
+Pillow>=10.0.0
+
+# Visualization & Progress
+matplotlib>=3.7.0
+tqdm>=4.65.0
+
+# Additional utilities for diffusion models
+einops>=0.7.0
+scipy>=1.11.0
