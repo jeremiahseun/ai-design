@@ -46,19 +46,25 @@ class DesignGenerator:
 
     def generate(self) -> Dict[str, Any]:
         """
-        Generate a complete design brief
+        Generate a complete design brief with meaningful label correlations
         Returns: Dictionary containing elements and metadata
         """
-        # Select layout and format
-        layout = random.choice(self.LAYOUTS)
+        # Step 1: Choose format first (this drives layout selection)
         format_type = random.choice(self.FORMATS)
-        palette = random.choice(self.PALETTES)
-        goal = random.choice(self.GOALS)
 
-        # Generate elements based on layout
+        # Step 2: Select layout based on format (creates format-layout correlation)
+        layout = self._select_layout_for_format(format_type)
+
+        # Step 3: Select palette
+        palette = random.choice(self.PALETTES)
+
+        # Step 4: Generate elements based on layout
         elements = self._generate_elements(layout, palette)
 
-        # Create metadata
+        # Step 5: Select goal based on element composition (creates goal-visual correlation)
+        goal = self._select_goal_for_elements(elements)
+
+        # Step 6: Create metadata with correlated tone
         meta = self._generate_meta(goal, format_type, palette)
 
         return {
@@ -68,6 +74,55 @@ class DesignGenerator:
             'elements': elements,
             'meta': meta
         }
+
+    def _select_layout_for_format(self, format_type: str) -> str:
+        """
+        Select layout based on format to create meaningful correlation
+        - poster: prefers left/center (70% left, 20% center, 10% mixed)
+        - social_post: prefers center (80% center, 20% mixed)
+        - flyer: prefers mixed (60% mixed, 30% left, 10% center)
+        - banner: prefers left (90% left, 10% mixed)
+        """
+        weights = {
+            'poster': {'left_aligned': 0.7, 'center_aligned': 0.2, 'mixed': 0.1},
+            'social_post': {'center_aligned': 0.8, 'mixed': 0.15, 'left_aligned': 0.05},
+            'flyer': {'mixed': 0.6, 'left_aligned': 0.3, 'center_aligned': 0.1},
+            'banner': {'left_aligned': 0.9, 'mixed': 0.1, 'center_aligned': 0.0},
+        }
+
+        layout_probs = weights[format_type]
+        layouts = list(layout_probs.keys())
+        probs = list(layout_probs.values())
+
+        return random.choices(layouts, weights=probs, k=1)[0]
+
+    def _select_goal_for_elements(self, elements: List[Dict[str, Any]]) -> str:
+        """
+        Select goal based on element composition to create visual correlation
+        - Has CTA → action-oriented goals (promote, advertise, brand)
+        - Image-heavy → emotional goals (inspire, motivate, celebrate)
+        - Text-heavy → informational goals (inform, educate, share)
+        """
+        # Count element types
+        has_cta = any(e['type'] == 'cta' for e in elements)
+        image_count = sum(1 for e in elements if e['type'] == 'image')
+        text_count = sum(1 for e in elements if e['type'] in ['headline', 'subheadline', 'body'])
+
+        # Define goal categories
+        action_goals = ['promote_event', 'announce_product', 'advertise', 'brand_awareness']
+        emotional_goals = ['inspire', 'motivate', 'celebrate']
+        informational_goals = ['share_info', 'educate', 'inform']
+
+        # Select goal based on composition
+        if has_cta and random.random() < 0.7:  # 70% chance if has CTA
+            return random.choice(action_goals)
+        elif image_count >= 2 and random.random() < 0.6:  # 60% chance if image-heavy
+            return random.choice(emotional_goals)
+        elif text_count >= 3 and random.random() < 0.6:  # 60% chance if text-heavy
+            return random.choice(informational_goals)
+        else:
+            # Random fallback (maintains some diversity)
+            return random.choice(self.GOALS)
 
     def _generate_elements(self, layout: str, palette: Dict) -> List[Dict[str, Any]]:
         """
@@ -279,11 +334,21 @@ class DesignGenerator:
 
     def _generate_meta(self, goal: str, format_type: str, palette: Dict) -> Dict[str, Any]:
         """
-        Generate V_Meta semantic metadata
+        Generate V_Meta semantic metadata with correlated tone
         """
         goal_id = self.GOALS.index(goal)
         format_id = self.FORMATS.index(format_type)
-        tone = random.uniform(0.3, 0.9)  # Emotional tone
+
+        # Correlate tone with goal (adds another learnable signal)
+        # Action-oriented goals → higher energy (0.6-0.9)
+        # Emotional goals → varied (0.4-0.9)
+        # Informational goals → moderate (0.3-0.7)
+        if goal in ['promote_event', 'announce_product', 'advertise', 'brand_awareness']:
+            tone = random.uniform(0.6, 0.9)  # High energy
+        elif goal in ['inspire', 'motivate', 'celebrate']:
+            tone = random.uniform(0.4, 0.9)  # Varied emotional
+        else:  # informational
+            tone = random.uniform(0.3, 0.7)  # Moderate/calm
 
         return {
             'v_Goal': goal_id,
