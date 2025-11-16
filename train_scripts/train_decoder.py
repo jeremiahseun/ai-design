@@ -27,9 +27,9 @@ from models.decoder import ConditionalUNet
 from models.diffusion_utils import DiffusionSchedule
 from utils.dataset import create_dataloaders
 
-def train_epoch(model, dataloader, diffusion, optimizer, device, epoch):
+def train_epoch(model, dataloader, diffusion, optimizer, device, epoch, gradient_accumulation_steps=1, scaler=None):
     """
-    Train for one epoch
+    Train for one epoch with gradient accumulation and mixed precision support
     """
     model.train()
     total_loss = 0
@@ -55,27 +55,44 @@ def train_epoch(model, dataloader, diffusion, optimizer, device, epoch):
         # Add noise to images (forward diffusion)
         x_t = diffusion.q_sample(p_images, t, noise)
 
-        # Predict noise
-        predicted_noise = model(x_t, t, v_meta)
-
-        # Calculate loss (MSE between predicted and actual noise)
-        loss = torch.nn.functional.mse_loss(predicted_noise, noise)
+        # Forward pass with mixed precision
+        if scaler is not None:
+            with torch.cuda.amp.autocast():
+                predicted_noise = model(x_t, t, v_meta)
+                loss = torch.nn.functional.mse_loss(predicted_noise, noise)
+                loss = loss / gradient_accumulation_steps
+        else:
+            predicted_noise = model(x_t, t, v_meta)
+            loss = torch.nn.functional.mse_loss(predicted_noise, noise)
+            loss = loss / gradient_accumulation_steps
 
         # Backward pass
-        optimizer.zero_grad()
-        loss.backward()
+        if scaler is not None:
+            scaler.scale(loss).backward()
+        else:
+            loss.backward()
 
-        # Gradient clipping
-        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+        # Update weights after accumulation steps
+        if (batch_idx + 1) % gradient_accumulation_steps == 0:
+            if scaler is not None:
+                # Gradient clipping
+                scaler.unscale_(optimizer)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                scaler.step(optimizer)
+                scaler.update()
+                optimizer.zero_grad()
+            else:
+                # Gradient clipping
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                optimizer.step()
+                optimizer.zero_grad()
 
-        optimizer.step()
-
-        # Accumulate
-        total_loss += loss.item()
+        # Accumulate (multiply back by gradient_accumulation_steps for logging)
+        total_loss += loss.item() * gradient_accumulation_steps
 
         # Update progress bar
         pbar.set_postfix({
-            'loss': f'{loss.item():.4f}',
+            'loss': f'{loss.item() * gradient_accumulation_steps:.4f}',
             'avg_loss': f'{total_loss / (batch_idx + 1):.4f}'
         })
 
@@ -248,17 +265,30 @@ def train(args):
         n_format_classes=args.n_format_classes,
         time_emb_dim=args.time_emb_dim,
         meta_emb_dim=args.meta_emb_dim,
-        dropout=args.dropout
+        attention_levels=(3,),  # Only apply attention at 32x32 (smallest resolution)
+        dropout=args.dropout,
+        use_gradient_checkpointing=args.use_gradient_checkpointing
     ).to(device)
 
     total_params = sum(p.numel() for p in model.parameters())
     print(f"  Total parameters: {total_params:,}")
+    if args.use_gradient_checkpointing:
+        print(f"  Gradient checkpointing: Enabled")
 
     # Create optimizer and scheduler
     optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     scheduler = ReduceLROnPlateau(
         optimizer, mode='min', factor=0.5, patience=5
     )
+
+    # Mixed precision training
+    scaler = torch.amp.GradScaler('cuda') if args.mixed_precision and device.type == 'cuda' else None
+    if scaler:
+        print(f"  Mixed precision: Enabled")
+
+    print(f"  Batch size: {args.batch_size}")
+    print(f"  Gradient accumulation: {args.gradient_accumulation_steps}")
+    print(f"  Effective batch size: {args.batch_size * args.gradient_accumulation_steps}")
 
     # Resume from checkpoint if specified
     start_epoch = 0
@@ -284,7 +314,9 @@ def train(args):
 
         # Train
         train_loss = train_epoch(
-            model, train_loader, diffusion, optimizer, device, epoch
+            model, train_loader, diffusion, optimizer, device, epoch,
+            gradient_accumulation_steps=args.gradient_accumulation_steps,
+            scaler=scaler
         )
 
         # Validate
@@ -379,14 +411,20 @@ def main():
     # Training
     parser.add_argument('--epochs', type=int, default=30,
                        help='Number of epochs')
-    parser.add_argument('--batch_size', type=int, default=16,
-                       help='Batch size')
+    parser.add_argument('--batch_size', type=int, default=4,
+                       help='Batch size (reduced for memory)')
+    parser.add_argument('--gradient_accumulation_steps', type=int, default=4,
+                       help='Gradient accumulation steps (effective batch size = batch_size * this)')
     parser.add_argument('--lr', type=float, default=2e-4,
                        help='Learning rate')
     parser.add_argument('--weight_decay', type=float, default=1e-4,
                        help='Weight decay')
     parser.add_argument('--num_workers', type=int, default=0,
                        help='Number of data loading workers')
+    parser.add_argument('--mixed_precision', action='store_true', default=True,
+                       help='Use mixed precision training (AMP)')
+    parser.add_argument('--use_gradient_checkpointing', action='store_true', default=True,
+                       help='Use gradient checkpointing to save memory')
 
     # Checkpointing
     parser.add_argument('--checkpoint_dir', type=str, default='checkpoints',

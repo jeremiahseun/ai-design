@@ -14,6 +14,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 from typing import Optional, Tuple
+from torch.utils.checkpoint import checkpoint
 
 
 class SinusoidalPositionEmbeddings(nn.Module):
@@ -179,13 +180,14 @@ class ResidualBlock(nn.Module):
 
 class AttentionBlock(nn.Module):
     """
-    Self-attention block for U-Net
+    Memory-efficient self-attention block for U-Net with chunked computation
     """
 
-    def __init__(self, channels: int, num_heads: int = 4):
+    def __init__(self, channels: int, num_heads: int = 4, chunk_size: int = 256):
         super().__init__()
         self.channels = channels
         self.num_heads = num_heads
+        self.chunk_size = chunk_size  # Process attention in chunks to save memory
 
         self.norm = nn.GroupNorm(8, channels)
         self.qkv = nn.Conv2d(channels, channels * 3, 1)
@@ -193,6 +195,8 @@ class AttentionBlock(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
+        Memory-efficient attention with chunked computation
+
         Args:
             x: [B, C, H, W]
 
@@ -211,10 +215,28 @@ class AttentionBlock(nn.Module):
 
         q, k, v = qkv[0], qkv[1], qkv[2]
 
-        # Attention
+        # Chunked attention computation to save memory
         scale = (C // self.num_heads) ** -0.5
-        attn = torch.softmax(torch.matmul(q, k.transpose(-2, -1)) * scale, dim=-1)
-        out = torch.matmul(attn, v)  # [B, heads, HW, C//heads]
+        seq_len = H * W
+
+        # Process in chunks if sequence is large
+        if seq_len > self.chunk_size:
+            out_chunks = []
+            for i in range(0, seq_len, self.chunk_size):
+                end_i = min(i + self.chunk_size, seq_len)
+                q_chunk = q[:, :, i:end_i, :]  # [B, heads, chunk_size, C//heads]
+
+                # Compute attention for this chunk
+                attn_chunk = torch.matmul(q_chunk, k.transpose(-2, -1)) * scale  # [B, heads, chunk_size, HW]
+                attn_chunk = torch.softmax(attn_chunk, dim=-1)
+                out_chunk = torch.matmul(attn_chunk, v)  # [B, heads, chunk_size, C//heads]
+                out_chunks.append(out_chunk)
+
+            out = torch.cat(out_chunks, dim=2)  # [B, heads, HW, C//heads]
+        else:
+            # Standard attention for small sequences
+            attn = torch.softmax(torch.matmul(q, k.transpose(-2, -1)) * scale, dim=-1)
+            out = torch.matmul(attn, v)  # [B, heads, HW, C//heads]
 
         # Reshape back
         out = out.permute(0, 1, 3, 2).reshape(B, C, H, W)
@@ -239,11 +261,13 @@ class ConditionalUNet(nn.Module):
                  meta_emb_dim: int = 256,
                  num_res_blocks: int = 2,
                  attention_levels: Tuple[int, ...] = (1, 2),
-                 dropout: float = 0.1):
+                 dropout: float = 0.1,
+                 use_gradient_checkpointing: bool = False):
         super().__init__()
 
         self.in_channels = in_channels
         self.out_channels = out_channels
+        self.use_gradient_checkpointing = use_gradient_checkpointing
 
         # Embeddings
         self.time_embedding = TimeEmbedding(time_emb_dim, time_emb_dim)
@@ -270,10 +294,9 @@ class ConditionalUNet(nn.Module):
                 now_channels = out_channels_block
                 channels.append(now_channels)
 
-                # Add attention
+                # Add attention (don't append to channels - attention doesn't change dimensions)
                 if i in attention_levels:
                     self.down_blocks.append(AttentionBlock(now_channels))
-                    channels.append(now_channels)
 
             # Downsample (except last level)
             if i != len(channel_multipliers) - 1:
@@ -302,8 +325,10 @@ class ConditionalUNet(nn.Module):
                 )
                 now_channels = out_channels_block
 
-                # Add attention
-                if i in attention_levels:
+                # Add attention (mirror the encoder levels)
+                # If attention at encoder level 3, apply at decoder level 0 (reversed)
+                encoder_level = len(channel_multipliers) - 1 - i
+                if encoder_level in attention_levels:
                     self.up_blocks.append(AttentionBlock(now_channels))
 
             # Upsample (except last level)
@@ -353,21 +378,39 @@ class ConditionalUNet(nn.Module):
         hs = [h]
         for module in self.down_blocks:
             if isinstance(module, ResidualBlock):
-                h = module(h, cond_emb)
-            else:
+                if self.use_gradient_checkpointing and self.training:
+                    h = checkpoint(module, h, cond_emb, use_reentrant=False)
+                else:
+                    h = module(h, cond_emb)
+                hs.append(h)  # Only save after ResidualBlock
+            elif isinstance(module, AttentionBlock):
+                if self.use_gradient_checkpointing and self.training:
+                    h = checkpoint(module, h, use_reentrant=False)
+                else:
+                    h = module(h)
+                # Don't append - attention doesn't change dimensions
+            else:  # Downsample conv
                 h = module(h)
-            hs.append(h)
+                hs.append(h)  # Save after downsample
 
         # Middle
-        h = self.mid_block1(h, cond_emb)
-        h = self.mid_attn(h)
-        h = self.mid_block2(h, cond_emb)
+        if self.use_gradient_checkpointing and self.training:
+            h = checkpoint(self.mid_block1, h, cond_emb, use_reentrant=False)
+            h = checkpoint(self.mid_attn, h, use_reentrant=False)
+            h = checkpoint(self.mid_block2, h, cond_emb, use_reentrant=False)
+        else:
+            h = self.mid_block1(h, cond_emb)
+            h = self.mid_attn(h)
+            h = self.mid_block2(h, cond_emb)
 
         # Upsample
         for module in self.up_blocks:
             if isinstance(module, ResidualBlock):
                 h = torch.cat([h, hs.pop()], dim=1)
-                h = module(h, cond_emb)
+                if self.use_gradient_checkpointing and self.training:
+                    h = checkpoint(module, h, cond_emb, use_reentrant=False)
+                else:
+                    h = module(h, cond_emb)
             else:
                 h = module(h)
 

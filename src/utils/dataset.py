@@ -32,10 +32,11 @@ class SyntheticDesignDataset(Dataset):
         self.data_dir = Path(data_dir)
         self.split = split
 
-        # Get all sample indices
+        # Get all sample indices (skip macOS hidden files like ._006435.npy)
         image_dir = self.data_dir / 'images'
         self.all_indices = sorted([
             int(f.stem) for f in image_dir.glob('*.npy')
+            if not f.name.startswith('._')  # Skip macOS metadata files
         ])
 
         # Split into train/val

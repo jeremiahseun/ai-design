@@ -47,7 +47,8 @@ def load_model(checkpoint_path, device):
         base_channels=64,
         channel_multipliers=(1, 2, 4, 8),
         n_goal_classes=10,
-        n_format_classes=4
+        n_format_classes=4,
+        attention_levels=(3,)  # Match training settings - only at 32x32
     ).to(device)
 
     model.load_state_dict(checkpoint['model_state_dict'])
