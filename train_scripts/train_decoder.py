@@ -152,9 +152,10 @@ def validate_epoch(model, dataloader, diffusion, device, epoch):
     return avg_loss
 
 
-def save_checkpoint(model, optimizer, scheduler, diffusion, epoch, loss, checkpoint_dir, is_best=False):
+def save_checkpoint(model, optimizer, scheduler, diffusion, epoch, val_loss, checkpoint_dir, train_loss=None, is_best=False):
     """
     Save model checkpoint
+    Strategy: Keep best model + last epoch only (auto-delete previous epoch)
     """
     checkpoint_dir = Path(checkpoint_dir)
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
@@ -164,19 +165,28 @@ def save_checkpoint(model, optimizer, scheduler, diffusion, epoch, loss, checkpo
         'model_state_dict': model.state_dict(),
         'optimizer_state_dict': optimizer.state_dict(),
         'scheduler_state_dict': scheduler.state_dict() if scheduler else None,
-        'loss': loss,
+        'val_loss': val_loss,
+        'train_loss': train_loss,
         'timesteps': diffusion.timesteps
     }
 
-    # Save regular checkpoint
+    # Delete previous epoch checkpoint (epoch - 1)
+    if epoch > 0:
+        prev_checkpoint = checkpoint_dir / f'decoder_epoch_{epoch-1:03d}.pth'
+        if prev_checkpoint.exists():
+            prev_checkpoint.unlink()
+            print(f"  🗑️  Deleted previous checkpoint: epoch {epoch-1}")
+
+    # Save current epoch checkpoint
     checkpoint_path = checkpoint_dir / f'decoder_epoch_{epoch:03d}.pth'
     torch.save(checkpoint, checkpoint_path)
+    print(f"  💾 Saved epoch checkpoint: epoch {epoch}")
 
     # Save best checkpoint
     if is_best:
         best_path = checkpoint_dir / 'decoder_best.pth'
         torch.save(checkpoint, best_path)
-        print(f"  💾 Saved best model (val_loss: {loss:.4f})")
+        print(f"  💾 Saved best model (val_loss: {val_loss:.4f})")
 
     return checkpoint_path
 
@@ -184,6 +194,7 @@ def save_checkpoint(model, optimizer, scheduler, diffusion, epoch, loss, checkpo
 def load_checkpoint(model, checkpoint_path, optimizer=None, scheduler=None):
     """
     Load model checkpoint
+    Returns: (epoch, val_loss)
     """
     print(f"Loading checkpoint from {checkpoint_path}")
     checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
@@ -197,9 +208,12 @@ def load_checkpoint(model, checkpoint_path, optimizer=None, scheduler=None):
         scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
 
     epoch = checkpoint.get('epoch', 0)
-    print(f"  Resumed from epoch {epoch}")
+    val_loss = checkpoint.get('val_loss', checkpoint.get('loss', float('inf')))  # Backward compatibility
 
-    return epoch
+    print(f"  Resumed from epoch {epoch}")
+    print(f"  Previous val_loss: {val_loss:.6f}")
+
+    return epoch, val_loss
 
 
 def train(args):
@@ -295,7 +309,8 @@ def train(args):
     best_val_loss = float('inf')
 
     if args.resume:
-        start_epoch = load_checkpoint(model, args.resume, optimizer, scheduler)
+        start_epoch, resumed_val_loss = load_checkpoint(model, args.resume, optimizer, scheduler)
+        best_val_loss = resumed_val_loss  # Restore the best val loss
         start_epoch += 1  # Start from next epoch
 
     # Training loop
@@ -338,16 +353,16 @@ def train(args):
         print(f"  Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f}")
         print(f"  LR: {optimizer.param_groups[0]['lr']:.6f}")
 
-        # Save checkpoint
+        # Save checkpoint (every epoch to maintain resume capability)
         is_best = val_loss < best_val_loss
         if is_best:
             best_val_loss = val_loss
 
-        if (epoch + 1) % args.save_interval == 0 or is_best:
-            save_checkpoint(
-                model, optimizer, scheduler, diffusion, epoch,
-                val_loss, checkpoint_dir, is_best
-            )
+        # Always save (keeps last epoch + best, auto-deletes old epochs)
+        save_checkpoint(
+            model, optimizer, scheduler, diffusion, epoch,
+            val_loss, checkpoint_dir, train_loss=train_loss, is_best=is_best
+        )
 
         print("-" * 80)
 
