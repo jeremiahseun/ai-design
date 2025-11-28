@@ -1,0 +1,16 @@
+# Requirements for Design Dataset Scraping System
+
+# Core dependencies
+requests>=2.31.0
+Pillow>=10.0.0
+anthropic>=0.25.0
+
+# Image processing
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# Browser automation for Pinterest
+playwright>=1.40.0
+
+# Development
+tqdm>=4.66.0

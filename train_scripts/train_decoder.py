@@ -26,6 +26,7 @@ from core.schemas import DEVICE
 from models.decoder import ConditionalUNet
 from models.diffusion_utils import DiffusionSchedule
 from utils.dataset import create_dataloaders
+from utils.real_dataset import create_real_dataloaders
 
 def train_epoch(model, dataloader, diffusion, optimizer, device, epoch, gradient_accumulation_steps=1, scaler=None):
     """
@@ -245,12 +246,23 @@ def train(args):
 
     # Create dataloaders
     print(f"\nLoading dataset from: {args.data_dir}")
-    train_loader, val_loader = create_dataloaders(
-        data_dir=args.data_dir,
-        batch_size=args.batch_size,
-        train_ratio=args.train_ratio,
-        num_workers=args.num_workers
-    )
+
+    if args.use_real_data:
+        print("  Using REAL DATA dataset loader")
+        train_loader, val_loader = create_real_dataloaders(
+            data_dir=args.data_dir,
+            batch_size=args.batch_size,
+            train_ratio=args.train_ratio,
+            num_workers=args.num_workers
+        )
+    else:
+        print("  Using SYNTHETIC DATA dataset loader")
+        train_loader, val_loader = create_dataloaders(
+            data_dir=args.data_dir,
+            batch_size=args.batch_size,
+            train_ratio=args.train_ratio,
+            num_workers=args.num_workers
+        )
 
     print(f"  Train batches: {len(train_loader)}")
     print(f"  Val batches: {len(val_loader)}")
@@ -440,6 +452,7 @@ def main():
                        help='Use mixed precision training (AMP)')
     parser.add_argument('--use_gradient_checkpointing', action='store_true', default=True,
                        help='Use gradient checkpointing to save memory')
+    parser.add_argument('--use_real_data', action='store_true', help='Use real data loader')
 
     # Checkpointing
     parser.add_argument('--checkpoint_dir', type=str, default='checkpoints',

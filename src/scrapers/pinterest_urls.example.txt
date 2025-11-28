@@ -1,0 +1,38 @@
+# Example Pinterest URLs for scraping
+# Add your Pinterest image URLs here (one per line)
+# Lines starting with # are ignored
+
+# Format 1: Pinterest pin URL
+# https://www.pinterest.com/pin/1234567890/
+
+# Format 2: Direct image URL (from pinimg.com)
+# https://i.pinimg.com/originals/ab/cd/ef/abcdef123456.jpg
+
+# Example URLs (these are placeholders - replace with real URLs):
+# https://www.pinterest.com/pin/123456789/
+# https://i.pinimg.com/originals/12/34/56/123456789.jpg
+
+# How to collect Pinterest URLs:
+# 1. Go to https://www.pinterest.com
+# 2. Search for "graphic design poster", "event flyer", "social media design", etc.
+# 3. Click on a design you like
+# 4. Right-click on the image and select "Copy image address" (this gives you the direct URL)
+#    OR copy the pin URL from your browser
+# 5. Paste it here
+
+# Recommended search queries:
+# - "graphic design poster"
+# - "modern poster design"
+# - "social media template"
+# - "event flyer design"
+# - "banner design"
+# - "instagram post design"
+
+# Target distribution:
+# - 30% posters (vertical/square designs)
+# - 30% social media (Instagram, Facebook posts)
+# - 20% flyers (horizontal A4-style)
+# - 20% banners (wide horizontal)
+
+# Note: Make sure designs are high-quality and professional
+# Avoid designs with heavy text or overly complex layouts

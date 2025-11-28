@@ -45,6 +45,10 @@ ENV/
 
 # Data
 data/synthetic_dataset/
+data/real_designs/
+data/lora_dataset/
+data/lora_dataset.zip
+data/fonts/
 data/example_design.json
 data/test_*.png
 data/verify_*.png
@@ -58,10 +62,21 @@ wandb/
 runs/
 tb_logs/
 
-# Model checkpoints
+# Model checkpoints & weights
 checkpoints/
 models/*.pth
 models/*.pt
+*.safetensors
+*.bin
+*.msgpack
+
+# Visualizations (generated outputs)
+visualizations/
+
+# Large archives
+*.tar.gz
+*.zip
+*.7z
 
 # Temporary files
 tmp/
@@ -76,3 +91,15 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+src/scrapers/config.json
+
+# Gemini artifacts (local only)
+.gemini/
+.claude/
+
+# Scraper outputs
+src/scrapers/pinterest_links.txt
+src/scrapers/image_urls.txt
+src/scrapers/downloads/
+src/scraped_data/
+src/scrapers/images/
