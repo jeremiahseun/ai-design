@@ -13,12 +13,20 @@ from src.agents.design_spec import DesignSpec
 
 from src.designers.layout_selector import LayoutSelector
 
+from src.generators.palette_manager import PaletteManager
+
 class CompositionalDesigner:
     def __init__(self, device: str = "mps"):
         self.layout_engine = LayoutEngine()
         self.layout_selector = LayoutSelector()
         self.asset_generator = AssetGenerator(device=device)
         self.text_renderer = ConstraintTextRenderer()
+        self.palette_manager = PaletteManager()
+
+        # State for palette consistency
+        self.current_base_palette = None
+        self.current_spec_id = None
+        self.variant_counter = 0
 
     def create_design(self, spec: DesignSpec) -> Image.Image:
         """
@@ -40,9 +48,27 @@ class CompositionalDesigner:
         # Collect text zones for masking
         text_zones = [(z.x, z.y, z.w, z.h) for z in layout.zones if z.type == ZoneType.TEXT]
 
+        # Generate variant-specific palette
+        # We assume self.palette_manager exists (added in __init__)
+        # If not, we'll just let the generator pick one (fallback)
+        variant_palette = None
+        if hasattr(self, 'palette_manager'):
+            # If this is the first variant, generate base palette
+            if not hasattr(self, 'current_base_palette') or self.current_spec_id != id(spec):
+                self.current_base_palette = self.palette_manager.generate_base_palette(spec.tone, spec.goal)
+                self.current_spec_id = id(spec)
+                self.variant_counter = 0
+
+            # Generate shifted palette for this variant
+            variant_palette = self.palette_manager.generate_variant_palette(
+                self.current_base_palette, self.variant_counter
+            )
+            self.variant_counter += 1
+
         # Generate procedural background
         bg = self.asset_generator.generate_background(width, height, tone=spec.tone,
-                                                      goal=spec.goal, text_zones=text_zones)
+                                                      goal=spec.goal, text_zones=text_zones,
+                                                      palette=variant_palette)
         canvas = bg
 
         # 4. Process Zones
@@ -59,9 +85,17 @@ class CompositionalDesigner:
 
             elif zone.type == ZoneType.TEXT:
                 text_content = ""
-                if zone.name == "headline": text_content = spec.content.headline
-                elif zone.name == "subheading": text_content = spec.content.subheading
-                elif zone.name == "details": text_content = spec.content.details
+                element_type = "body"  # Default
+
+                if zone.name == "headline":
+                    text_content = spec.content.headline
+                    element_type = "headline"
+                elif zone.name == "subheading":
+                    text_content = spec.content.subheading
+                    element_type = "subheading"
+                elif zone.name == "details" or zone.name == "body_text":
+                    text_content = spec.content.details
+                    element_type = "body"
 
                 if text_content:
                     print(f"✍️ Rendering Text: {zone.name}")
@@ -70,7 +104,9 @@ class CompositionalDesigner:
                         text_content,
                         (x1, y1, x2, y2),
                         align="center" if "central" in layout.name else "left",
-                        tone=spec.tone  # Pass tone for smart shadow decisions
+                        tone=spec.tone,
+                        goal=spec.goal,
+                        element=element_type
                     )
 
             elif zone.type == ZoneType.LOGO and spec.logo_path:

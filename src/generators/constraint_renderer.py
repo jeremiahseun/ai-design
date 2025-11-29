@@ -12,6 +12,17 @@ class ConstraintTextRenderer:
     def __init__(self):
         self.default_font = "Arial" # Fallback
 
+        # Initialize FontManager
+        try:
+            from src.utils.font_manager import FontManager
+            self.font_manager = FontManager()
+            self.use_google_fonts = True
+            print("✅ FontManager initialized")
+        except Exception as e:
+            print(f"⚠️  FontManager not available: {e}")
+            self.font_manager = None
+            self.use_google_fonts = False
+
     def _sample_background_brightness(self, image: Image.Image, box: Tuple[int, int, int, int]) -> float:
         """
         Sample the background within the box and return brightness (0.0 = black, 1.0 = white).
@@ -37,13 +48,26 @@ class ConstraintTextRenderer:
                    image: Image.Image,
                    text: str,
                    box: Tuple[int, int, int, int],
-                   font_path: str = "/System/Library/Fonts/Helvetica.ttc",
+                   font_path: Optional[str] = None,
                    color: Optional[str] = None,
                    align: str = "center",
-                   tone: float = 0.5) -> Image.Image:
+                   tone: float = 0.5,
+                   goal: int = 0,
+                   element: str = "headline") -> Image.Image:
         """
         Render text fitting strictly inside the box.
         Smart color selection based on background.
+
+        Args:
+            image: PIL Image to render on
+            text: Text to render
+            box: (x1, y1, x2, y2) bounding box
+            font_path: Optional custom font path
+            color: Optional text color
+            align: Text alignment
+            tone: Design tone (0-1) for font selection
+            goal: Design goal (0-3) for font selection
+            element: 'headline', 'subheading', or 'body' for font selection
         """
         draw = ImageDraw.Draw(image)
         x1, y1, x2, y2 = box
@@ -78,6 +102,14 @@ class ConstraintTextRenderer:
         # Only add shadow if needed OR if tone is bold/energetic
         use_shadow = needs_shadow or tone > 0.6
 
+        # Get professional font
+        if font_path:
+            selected_font_path = font_path
+        elif self.use_google_fonts and self.font_manager:
+            selected_font_path = self.font_manager.get_font_for_tone(tone, goal, element)
+        else:
+            selected_font_path = "/System/Library/Fonts/Helvetica.ttc"
+
         # 1. Find optimal font size
         font_size = 100 # Start large
         min_font_size = 10
@@ -88,7 +120,7 @@ class ConstraintTextRenderer:
         # Binary search-ish approach (iterative reduction)
         while font_size >= min_font_size:
             try:
-                font = ImageFont.truetype(font_path, font_size)
+                font = ImageFont.truetype(selected_font_path, font_size)
             except:
                 font = ImageFont.load_default()
                 break

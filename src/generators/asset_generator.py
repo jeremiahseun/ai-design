@@ -21,11 +21,12 @@ class AssetGenerator:
         self.bg_generator = RefinedBackgroundGenerator()
 
     def generate_background(self, width: int, height: int, tone: float = 0.5,
-                          goal: int = 0, text_zones: List[Tuple[float, float, float, float]] = None) -> Image.Image:
+                          goal: int = 0, text_zones: List[Tuple[float, float, float, float]] = None,
+                          palette: Optional[dict] = None) -> Image.Image:
         """
         Generate a background asset using refined procedural generation.
         """
-        return self.bg_generator.generate(width, height, tone, goal, text_zones)
+        return self.bg_generator.generate(width, height, tone, goal, text_zones, palette)
 
     def generate_hero_image(self, prompt: str, width: int, height: int) -> Image.Image:
         """

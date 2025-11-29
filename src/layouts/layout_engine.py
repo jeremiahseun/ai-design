@@ -59,7 +59,10 @@ class LayoutEngine:
             "split_vertical": LayoutEngine._split_vertical(),
             "central_hero": LayoutEngine._central_hero(),
             "typographic_bold": LayoutEngine._typographic_bold(),
-            "modern_clean": LayoutEngine._modern_clean()
+            "modern_clean": LayoutEngine._modern_clean(),
+            "magazine_grid": LayoutEngine._magazine_grid(),
+            "diagonal_split": LayoutEngine._diagonal_split(),
+            "asymmetric_editorial": LayoutEngine._asymmetric_editorial()
         }
         return layouts.get(name, LayoutEngine._modern_clean())
 
@@ -134,5 +137,50 @@ class LayoutEngine:
                 Zone(0.1, 0.72, 0.8, 0.08, ZoneType.TEXT, "subheading", 2),
                 Zone(0.1, 0.85, 0.8, 0.05, ZoneType.TEXT, "details", 2),
                 Zone(0.05, 0.05, 0.1, 0.1, ZoneType.LOGO, "logo", 3)
+            ]
+        )
+
+    @staticmethod
+    def _magazine_grid() -> Layout:
+        """High-fashion magazine style with overlapping text"""
+        return Layout(
+            name="magazine_grid",
+            description="Editorial grid with overlapping headline.",
+            zones=[
+                Zone(0.0, 0.0, 1.0, 0.65, ZoneType.IMAGE, "hero_image", 1),
+                Zone(0.05, 0.55, 0.9, 0.15, ZoneType.TEXT, "headline", 2), # Overlaps image
+                Zone(0.05, 0.72, 0.4, 0.05, ZoneType.TEXT, "subheading", 2),
+                Zone(0.5, 0.72, 0.45, 0.2, ZoneType.TEXT, "details", 2),
+                Zone(0.8, 0.05, 0.15, 0.05, ZoneType.LOGO, "logo", 3)
+            ]
+        )
+
+    @staticmethod
+    def _diagonal_split() -> Layout:
+        """Dynamic diagonal flow"""
+        return Layout(
+            name="diagonal_split",
+            description="Dynamic layout with diagonal visual flow.",
+            zones=[
+                Zone(0.05, 0.05, 0.6, 0.5, ZoneType.IMAGE, "hero_image", 1), # Top-left
+                Zone(0.4, 0.5, 0.55, 0.15, ZoneType.TEXT, "headline", 2), # Center-right
+                Zone(0.4, 0.68, 0.55, 0.08, ZoneType.TEXT, "subheading", 2),
+                Zone(0.4, 0.8, 0.55, 0.15, ZoneType.TEXT, "details", 2),
+                Zone(0.05, 0.85, 0.1, 0.1, ZoneType.LOGO, "logo", 3)
+            ]
+        )
+
+    @staticmethod
+    def _asymmetric_editorial() -> Layout:
+        """Artistic asymmetric layout"""
+        return Layout(
+            name="asymmetric_editorial",
+            description="Sophisticated off-center composition.",
+            zones=[
+                Zone(0.4, 0.0, 0.6, 1.0, ZoneType.IMAGE, "hero_image", 1), # Right vertical strip
+                Zone(0.05, 0.15, 0.3, 0.3, ZoneType.TEXT, "headline", 2), # Left heavy
+                Zone(0.05, 0.5, 0.3, 0.1, ZoneType.TEXT, "subheading", 2),
+                Zone(0.05, 0.65, 0.3, 0.3, ZoneType.TEXT, "details", 2),
+                Zone(0.05, 0.05, 0.1, 0.05, ZoneType.LOGO, "logo", 3)
             ]
         )

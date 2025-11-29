@@ -12,61 +12,7 @@ from PIL import Image, ImageDraw, ImageFilter
 import numpy as np
 import colorsys
 
-class ColorHarmony:
-    """Generates harmonious color palettes using color theory."""
 
-    @staticmethod
-    def hex_to_hsl(hex_color: str) -> Tuple[float, float, float]:
-        """Convert hex color to HSL."""
-        hex_color = hex_color.lstrip('#')
-        r, g, b = tuple(int(hex_color[i:i+2], 16) / 255.0 for i in (0, 2, 4))
-        return colorsys.rgb_to_hls(r, g, b)
-
-    @staticmethod
-    def hsl_to_hex(h: float, s: float, l: float) -> str:
-        """Convert HSL to hex color."""
-        r, g, b = colorsys.hls_to_rgb(h, l, s)
-        return f"#{int(r*255):02x}{int(g*255):02x}{int(b*255):02x}"
-
-    @staticmethod
-    def generate_palette(tone: float, goal: int) -> dict:
-        """Generate a harmonious color palette based on tone and goal."""
-
-        if tone < 0.3:  # Minimalist
-            return {
-                "base": "#FFFFFF",
-                "gradients": ["#F5F5F5", "#EBEBEB", "#E0E0E0"],
-                "accents": ["#CCCCCC"]
-            }
-
-        elif tone > 0.7:  # Memphis (Bold)
-            return {
-                "base": "#FFFFFF",
-                "gradients": ["#FFD700", "#FF69B4", "#FF1493"],
-                "accents": ["#00CED1", "#000000", "#FFD700"]
-            }
-
-        elif goal == 3:  # Inspire (Cyber)
-            return {
-                "base": "#0A0A0A",
-                "gradients": ["#1A0A2E", "#2E1A47", "#0A0A0A"],
-                "accents": ["#9D4EDD", "#00F5FF", "#7209B7"]
-            }
-
-        else:  # Boho/Balanced
-            base_hue = random.choice([0.05, 0.08, 0.12])  # Warm hues
-            return {
-                "base": ColorHarmony.hsl_to_hex(base_hue, 0.2, 0.95),
-                "gradients": [
-                    ColorHarmony.hsl_to_hex(base_hue, 0.3, 0.85),
-                    ColorHarmony.hsl_to_hex(base_hue + 0.05, 0.4, 0.70),
-                    ColorHarmony.hsl_to_hex(base_hue + 0.08, 0.5, 0.60)
-                ],
-                "accents": [
-                    ColorHarmony.hsl_to_hex(base_hue + 0.15, 0.4, 0.65),
-                    ColorHarmony.hsl_to_hex(base_hue - 0.1, 0.3, 0.70)
-                ]
-            }
 
 
 class GradientEngine:
@@ -169,6 +115,8 @@ class GradientEngine:
         return f"#{r:02x}{g:02x}{b:02x}"
 
 
+from .palette_manager import PaletteManager
+
 class RefinedBackgroundGenerator:
     """Professional-quality background generator using gradient-first composition."""
 
@@ -183,11 +131,12 @@ class RefinedBackgroundGenerator:
     }
 
     def __init__(self):
-        self.color_harmony = ColorHarmony()
+        self.palette_manager = PaletteManager()
         self.gradient_engine = GradientEngine()
 
     def generate(self, width: int, height: int, tone: float, goal: int,
-                 text_zones: List[Tuple[float, float, float, float]] = None) -> Image.Image:
+                 text_zones: List[Tuple[float, float, float, float]] = None,
+                 palette: Optional[dict] = None) -> Image.Image:
         """
         Generate a professional-quality background.
 
@@ -197,12 +146,14 @@ class RefinedBackgroundGenerator:
             tone: Design tone (0.0 = calm, 1.0 = energetic)
             goal: Design goal (0-3)
             text_zones: Text zones to avoid
+            palette: Optional custom palette dictionary
 
         Returns:
             PIL Image
         """
-        # Get color palette
-        palette = self.color_harmony.generate_palette(tone, goal)
+        # Get color palette (use provided or generate new)
+        if palette is None:
+            palette = self.palette_manager.generate_base_palette(tone, goal)
 
         # Determine style
         if tone < 0.3:
