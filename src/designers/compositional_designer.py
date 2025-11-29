@@ -37,9 +37,13 @@ class CompositionalDesigner:
         canvas = Image.new('RGB', (width, height), "#FFFFFF")
 
         # 3. Generate & Place Assets (Background first)
-        # For now, generate a gradient background for the whole canvas
-        bg = self.asset_generator.generate_background(width, height)
-        canvas.paste(bg, (0, 0))
+        # Collect text zones for masking
+        text_zones = [(z.x, z.y, z.w, z.h) for z in layout.zones if z.type == ZoneType.TEXT]
+
+        # Generate procedural background
+        bg = self.asset_generator.generate_background(width, height, tone=spec.tone,
+                                                      goal=spec.goal, text_zones=text_zones)
+        canvas = bg
 
         # 4. Process Zones
         for zone in sorted(layout.zones, key=lambda z: z.z_index):
@@ -47,13 +51,11 @@ class CompositionalDesigner:
             zone_w = x2 - x1
             zone_h = y2 - y1
 
+            # SKIP IMAGE ZONES FOR NOW (SD is too slow)
+            # We'll add procedural hero images later
             if zone.type == ZoneType.IMAGE:
-                print(f"🎨 Generating Hero Image for zone: {zone.name}")
-                # Generate hero
-                hero = self.asset_generator.generate_hero_image(spec.style_prompt, zone_w, zone_h)
-                # Resize to fit exactly (or crop)
-                hero = hero.resize((zone_w, zone_h), Image.Resampling.LANCZOS)
-                canvas.paste(hero, (x1, y1))
+                print(f"⏭️  Skipping hero image for zone: {zone.name} (SD disabled)")
+                continue
 
             elif zone.type == ZoneType.TEXT:
                 text_content = ""
