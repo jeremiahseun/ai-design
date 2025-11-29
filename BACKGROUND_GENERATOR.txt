@@ -1,0 +1,58 @@
+Algorithm Specification: Procedural Pinterest Background Generator
+
+1. System Overview
+This document defines the logic for a procedural generation algorithm designed to create high-aesthetic, functional design backgrounds similar to those found on Pinterest.
+
+Objective: To programmatically generate background assets that adhere to specific Style (visual aesthetic) and Type (functional layout) constraints.Target Output: 1080x1920px (9:16 Aspect Ratio) images or vector files.
+
+2. Core Logic Architecture
+The algorithm operates on a "Layered Composition" model. It does not generate an image in one pass; rather, it stacks layers based on semantic rules.
+The Pipeline
+Input Parsing: Decodes user intent (Style + Type).Parameter Mapping: Converts keywords into mathematical constraints (Hex codes, coordinate bounds, shapes).
+
+Layout Masking: Defines "Safe Zones" where drawing is forbidden (to allow for future text placement).
+
+Asset Generation: Procedurally draws geometric or organic shapes within the allowed zones.
+
+Texture Overlay: Applies noise, grain, or gradients to unify the image.
+
+3. Input Definitions
+Variable A: Design Type (The Layout Constraint)This variable dictates the Mask, a binary grid defining where pixels can be drawn (1) and where they must remain empty/neutral (0).TypeIntentMask LogicQuoteText in center.Center-Exclude: Draw only in the outer 20% margin.Phone_WallpaperFull coverage.No-Mask: Draw anywhere.Product_BackdropObject at bottom.Top-Heavy: Draw complex shapes at top; solid/gradient at bottom.Listicle/StoriesVertical text list.Columnar: Draw vertical margins or subtle header/footer anchors.Variable B: Style Mode (The Aesthetic Parameters)This variable dictates the Palette and Primitive Shapes.StylePalette LogicShape PrimitivesPhysics/MovementBoho/OrganicEarth Tones (Sage, Terracotta, Cream).Blobs, Arches, Wavy Lines.Fluid, overlapping, soft edges.MemphisHigh Contrast (Yellow, Black, Pink).Triangles, Squiggles, Dots.Scattered, non-overlapping, sharp edges.Cyber/GradientNeon/Dark (Purple, Cyan, Black).Gradients, Grid Lines.Linear interpolation, glow effects.MinimalistMonochromatic (Greys, Whites).Single Line, Single Circle.Static, high negative space.
+
+4. The Algorithmic Steps (Detailed)
+Step 1: Palette Selection AlgorithmThe LLM must generate or select a color array C consisting of 3-5 hex codes.C[0] = Background Base (Usually the lightest or darkest tone).C[1...n] = Accent Colors (For shapes).Rule: Contrast verification must occur. If Style == 'Minimalist', contrast between C[0] and C[1] must be < 15%. If Style == 'Memphis', contrast must be > 50%.
+Step 2: The Masking Engine (Grid Logic)Divide the canvas (1080x1920) into a normalized coordinate system $(0,0)$ to $(1,1)$.Function generate_mask(type):If Quote: Create a bounding box exclusion from $(0.2, 0.3)$ to $(0.8, 0.7)$. No high-frequency shapes may render here.If Product: Create a "Ground" plane from $(0, 0.7)$ to $(1, 1)$.
+Step 3: Procedural Shape PlacingUsing the Style variable, iterate through num_elements (usually 3 to 7).For Boho (The "Blob" Logic):Do not use standard circles. Use Catmull-Rom Splines or deform a circle using Perlin Noise.Algorithm: 1. Create a circle radius r.2. Define 8 vertices around the perimeter.3. Offset each vertex radially by a random amount noise(v).4. Connect vertices with smooth curves.For Abstract (The "Collage" Logic):Use simple geometry but randomize transparency (Alpha).Algorithm:Place shape at random(x,y) checking against Mask.Set BlendMode to Multiply or SoftLight.Rotation = random(0, 360).
+Step 4: The "Pinterest Polish" (Texture)A raw digital render looks "flat." The algorithm must apply a post-processing pass.Noise Generation: Create a layer of monochromatic Gaussian noise.Opacity Blend: Overlay noise at 3-5% opacity.Blur: If Style == Gradient, apply GaussianBlur(radius=50) to blend shape edges purely into color.
+Step 5: Implementation Data Structure (JSON)When asking an LLM to generate the code for a background, prompt it to first generate this configuration JSON. This acts as the blueprint.{
+  "meta": {
+    "width": 1080,
+    "height": 1920,
+    "seed": 12345
+  },
+  "config": {
+    "style": "Boho_Organic",
+    "background_hex": "#F2E8DC",
+    "texture_overlay": "Paper_Grain_02",
+    "layout_mask": "Center_Exclusion_Zone"
+  },
+  "elements": [
+    {
+      "type": "blob",
+      "color": "#A6B5A1",
+      "opacity": 0.8,
+      "position": {"x": 0.1, "y": 0.1},
+      "scale": 1.5,
+      "rotation": 45
+    },
+    {
+      "type": "arch",
+      "color": "#D48C70",
+      "opacity": 0.9,
+      "position": {"x": 0.9, "y": 0.9},
+      "scale": 1.2,
+      "rotation": 180
+    }
+  ]
+}
+6. Execution Instructions for LLMsIf you are using this algorithm to drive an LLM code generator:Python (Recommended): Instruct the LLM to use the PIL (Pillow) library for raster generation and numpy for noise generation. It handles layering and alpha blending best.SVG (Web): Instruct the LLM to generate an <svg> string. This is best for "Minimalist" or "Geometric" styles as it creates infinite-resolution vectors.Canvas API: If building a web app, instruct the LLM to write JavaScript using the HTML5 Canvas context.Prompt Example for Code Generation:"Act as a Generative Design Engine. Using the 'Boho' style parameters defined in the Algorithm Specification, write a Python script using Pillow that generates a 1080x1920 image. It should feature a cream background, 3 overlapping sage-green organic blobs in the corners (avoiding the center), and a 5% noise overlay."
