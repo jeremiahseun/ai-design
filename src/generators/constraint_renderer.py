@@ -53,7 +53,8 @@ class ConstraintTextRenderer:
                    align: str = "center",
                    tone: float = 0.5,
                    goal: int = 0,
-                   element: str = "headline") -> Image.Image:
+                   element: str = "headline",
+                   optical_adjustment: bool = False) -> Image.Image:
         """
         Render text fitting strictly inside the box.
         Smart color selection based on background.
@@ -68,6 +69,7 @@ class ConstraintTextRenderer:
             tone: Design tone (0-1) for font selection
             goal: Design goal (0-3) for font selection
             element: 'headline', 'subheading', or 'body' for font selection
+            optical_adjustment: If True, apply slight optical adjustments for better visual alignment.
         """
         draw = ImageDraw.Draw(image)
         x1, y1, x2, y2 = box
@@ -176,6 +178,16 @@ class ConstraintTextRenderer:
                 start_x = x2 - line_w
             else: # left
                 start_x = x1
+
+            # Optical Adjustment: Shift text slightly to account for visual weight
+            start_x_offset = 0
+            if optical_adjustment and align == "left":
+                # Shift slightly left to align visually with edge
+                start_x_offset = -int(box_w * 0.01)
+            elif optical_adjustment and align == "center":
+                # No shift for center usually
+                pass
+            start_x += start_x_offset
 
             curr_y = start_y + (i * line_height)
 

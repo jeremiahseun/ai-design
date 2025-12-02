@@ -103,3 +103,6 @@ src/scrapers/image_urls.txt
 src/scrapers/downloads/
 src/scraped_data/
 src/scrapers/images/
+
+
+.env

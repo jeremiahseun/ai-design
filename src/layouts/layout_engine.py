@@ -13,6 +13,8 @@ class ZoneType(Enum):
     IMAGE = "image"
     LOGO = "logo"
     BACKGROUND = "background"
+    SHAPE = "shape"
+    ICON = "icon"
 
 @dataclass
 class Zone:
@@ -61,6 +63,7 @@ class LayoutEngine:
             "typographic_bold": LayoutEngine._typographic_bold(),
             "modern_clean": LayoutEngine._modern_clean(),
             "magazine_grid": LayoutEngine._magazine_grid(),
+            "modern_geometric": LayoutEngine._modern_geometric(),
             "diagonal_split": LayoutEngine._diagonal_split(),
             "asymmetric_editorial": LayoutEngine._asymmetric_editorial()
         }
@@ -156,6 +159,23 @@ class LayoutEngine:
         )
 
     @staticmethod
+    def _modern_geometric() -> Layout:
+        """Modern layout with geometric accents"""
+        return Layout(
+            name="modern_geometric",
+            description="Clean layout with decorative geometric shapes.",
+            zones=[
+                Zone(0.0, 0.0, 1.0, 1.0, ZoneType.BACKGROUND, "bg", 0),
+                Zone(0.6, 0.1, 0.3, 0.3, ZoneType.SHAPE, "circle_accent", 1), # Decorative circle
+                Zone(0.1, 0.1, 0.8, 0.4, ZoneType.IMAGE, "hero_image", 2),
+                Zone(0.1, 0.55, 0.8, 0.15, ZoneType.TEXT, "headline", 3),
+                Zone(0.1, 0.72, 0.8, 0.08, ZoneType.TEXT, "subheading", 3),
+                Zone(0.1, 0.85, 0.8, 0.05, ZoneType.TEXT, "details", 3),
+                Zone(0.05, 0.05, 0.1, 0.1, ZoneType.LOGO, "logo", 4)
+            ]
+        )
+
+    @staticmethod
     def _diagonal_split() -> Layout:
         """Dynamic diagonal flow"""
         return Layout(
@@ -183,4 +203,93 @@ class LayoutEngine:
                 Zone(0.05, 0.65, 0.3, 0.3, ZoneType.TEXT, "details", 2),
                 Zone(0.05, 0.05, 0.1, 0.05, ZoneType.LOGO, "logo", 3)
             ]
+        )
+class DynamicLayoutEngine:
+    """
+    Generates layouts dynamically based on content elements.
+    """
+    @staticmethod
+    def generate_layout(elements: List['DesignElement'], base_layout_name: str = "modern_clean") -> Layout:
+        """
+        Generate a layout that fits the specific elements provided.
+        """
+        # Start with a base template
+        base_layout = LayoutEngine.get_layout(base_layout_name)
+
+        # Separate elements by role
+        primary = [e for e in elements if e.role == "primary"]
+        secondary = [e for e in elements if e.role == "secondary"]
+        tertiary = [e for e in elements if e.role == "tertiary"]
+
+        # Create new zones list
+        new_zones = []
+
+        # 1. Keep non-text zones (images, logos)
+        for zone in base_layout.zones:
+            if zone.type != ZoneType.TEXT:
+                new_zones.append(zone)
+
+        # 2. Allocate Text Zones
+        # We need to find where text usually goes in this layout
+        text_area_y_start = 0.5  # Default
+        text_area_height = 0.4
+
+        # Find the bounding box of original text zones to know where to put new ones
+        orig_text_zones = [z for z in base_layout.zones if z.type == ZoneType.TEXT]
+        if orig_text_zones:
+            min_y = min(z.y for z in orig_text_zones)
+            max_y = max(z.y + z.h for z in orig_text_zones)
+            min_x = min(z.x for z in orig_text_zones)
+            max_x = max(z.x + z.w for z in orig_text_zones)
+
+            text_area_y_start = min_y
+            text_area_height = max_y - min_y
+            text_area_x = min_x
+            text_area_w = max_x - min_x
+        else:
+            text_area_x = 0.1
+            text_area_w = 0.8
+
+        # Distribute available height among elements
+        total_elements = len(elements)
+        if total_elements == 0:
+            return Layout(base_layout.name + "_dynamic", new_zones, "Dynamic layout with no text")
+
+        # Simple vertical stack strategy for now
+        # (A real solver would be better, but this works for "list of headings")
+        current_y = text_area_y_start
+
+        # Calculate weights for height distribution
+        # Primary gets 2x space, Secondary 1.5x, Tertiary 1x
+        weights = []
+        for e in elements:
+            if e.role == "primary": weights.append(2.0)
+            elif e.role == "secondary": weights.append(1.5)
+            else: weights.append(1.0)
+
+        total_weight = sum(weights)
+        unit_height = text_area_height / total_weight
+
+        for i, element in enumerate(elements):
+            h = weights[i] * unit_height
+
+            # Add padding
+            h_actual = h * 0.9
+            y_actual = current_y + (h * 0.05)
+
+            new_zones.append(Zone(
+                x=text_area_x,
+                y=y_actual,
+                w=text_area_w,
+                h=h_actual,
+                type=ZoneType.TEXT,
+                name=f"text_{i}_{element.role}", # Unique name
+                z_index=2
+            ))
+            current_y += h
+
+        return Layout(
+            name=base_layout.name + "_dynamic",
+            zones=new_zones,
+            description=f"Dynamic layout for {total_elements} elements based on {base_layout.name}"
         )

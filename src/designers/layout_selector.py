@@ -32,7 +32,7 @@ class LayoutSelector:
         if spec.format == 3: # Banner (Horizontal)
             scores["split_horizontal"] += 10
             scores["modern_clean"] += 5
-            scores["asymmetric_editorial"] += 8 # Works well for banners
+            scores["asymmetric_editorial"] += 10 # Works extremely well for banners (Boosted from 8)
             scores["split_vertical"] -= 100 # Impossible for banners
             scores["typographic_bold"] -= 5
             scores["magazine_grid"] -= 5 # Too tall
@@ -87,6 +87,7 @@ class LayoutSelector:
             scores["central_hero"] += 5
             scores["modern_clean"] += 5
             scores["diagonal_split"] += 5
+            scores["asymmetric_editorial"] += 5 # Added: Great for minimal text
 
         # 4. Tone Adjustments
         if spec.tone > 0.7: # Energetic/Bold

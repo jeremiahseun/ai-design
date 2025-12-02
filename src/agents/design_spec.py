@@ -5,15 +5,39 @@ Represents the structured output from the Universal Design Agent.
 """
 
 from dataclasses import dataclass, asdict
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 import json
 
 @dataclass
+class DesignElement:
+    """A single element in the design content."""
+    text: str
+    role: str  # "primary", "secondary", "tertiary"
+    style_hint: Optional[str] = None
+
+@dataclass
 class DesignContent:
-    """Text content for the design"""
-    headline: str
-    subheading: str = ""
-    details: str = ""
+    """
+    Content for the design.
+    Now supports dynamic list of elements.
+    """
+    elements: List[DesignElement]
+
+    # Backward compatibility properties
+    @property
+    def headline(self) -> str:
+        primary = [e.text for e in self.elements if e.role == "primary"]
+        return primary[0] if primary else ""
+
+    @property
+    def subheading(self) -> str:
+        secondary = [e.text for e in self.elements if e.role == "secondary"]
+        return secondary[0] if secondary else ""
+
+    @property
+    def details(self) -> str:
+        tertiary = [e.text for e in self.elements if e.role == "tertiary"]
+        return "\n".join(tertiary) if tertiary else ""
 
 @dataclass
 class DesignSpec:
@@ -40,24 +64,19 @@ class DesignSpec:
     @property
     def goal_name(self) -> str:
         """Human-readable goal name"""
-        goals = {0: "Inform", 1: "Persuade", 2: "Entertain", 3: "Inspire"}
-        return goals.get(self.goal, "Unknown")
+        return ["Inform", "Persuade", "Entertain", "Inspire"][self.goal]
 
     @property
     def format_name(self) -> str:
         """Human-readable format name"""
-        formats = {0: "Poster", 1: "Social Media", 2: "Flyer", 3: "Banner"}
-        return formats.get(self.format, "Unknown")
+        return ["Poster", "Social Media", "Flyer", "Banner"][self.format]
 
     @property
     def tone_description(self) -> str:
         """Human-readable tone description"""
-        if self.tone < 0.33:
-            return "Calm & Minimal"
-        elif self.tone < 0.67:
-            return "Professional & Balanced"
-        else:
-            return "Energetic & Bold"
+        if self.tone < 0.4: return "Calm & Minimal"
+        if self.tone > 0.6: return "Energetic & Bold"
+        return "Balanced & Professional"
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary"""
@@ -72,7 +91,11 @@ class DesignSpec:
         """Create from dictionary"""
         # Handle nested DesignContent
         if isinstance(data.get('content'), dict):
-            data['content'] = DesignContent(**data['content'])
+            content_data = data['content']
+            # Handle elements list
+            if 'elements' in content_data:
+                elements = [DesignElement(**e) for e in content_data['elements']]
+                data['content'] = DesignContent(elements=elements)
         return cls(**data)
 
     @classmethod
@@ -86,9 +109,6 @@ class DesignSpec:
   Goal: {self.goal_name}
   Format: {self.format_name}
   Tone: {self.tone_description} ({self.tone:.2f})
-  Headline: "{self.content.headline}"
-  Subheading: "{self.content.subheading}"
-  Details: "{self.content.details}"
+  Elements: {len(self.content.elements)}
   Style: {self.style_prompt}
-  Logo: {self.logo_path if self.logo_path else "None"}
 """
