@@ -1,0 +1,130 @@
+{
+    "category": "social_media",
+    "templates": [
+        {
+            "id": "insta_minimal_quote",
+            "name": "Instagram Minimal Quote",
+            "category": "social_media",
+            "tags": [
+                "instagram",
+                "quote",
+                "minimal",
+                "clean",
+                "text_heavy"
+            ],
+            "description": "A clean, elegant layout for quotes with geometric accents.",
+            "recommended_styles": [
+                "Minimal",
+                "Modern"
+            ],
+            "layout": {
+                "canvas_ratio": 1.0,
+                "background_style": {
+                    "type": "dominant_color",
+                    "opacity": 1.0
+                },
+                "elements": [
+                    {
+                        "type": "blob",
+                        "name": "accent_shape_1",
+                        "x_percent": 0.75,
+                        "y_percent": 0.15,
+                        "width_percent": 0.4,
+                        "height_percent": 0.4,
+                        "color_variable": "accent",
+                        "layer_index": 0,
+                        "is_placeholder": false
+                    },
+                    {
+                        "type": "circle",
+                        "name": "accent_shape_2",
+                        "x_percent": 0.2,
+                        "y_percent": 0.8,
+                        "width_percent": 0.3,
+                        "height_percent": 0.3,
+                        "color_variable": "secondary",
+                        "layer_index": 0,
+                        "is_placeholder": false
+                    }
+                ],
+                "typography": [
+                    {
+                        "role": "hero",
+                        "text_content_variable": "quote",
+                        "font_variable": "serif_display",
+                        "size_percent": 0.09,
+                        "x_percent": 0.5,
+                        "y_percent": 0.42,
+                        "color_variable": "white",
+                        "alignment": "center",
+                        "max_width_percent": 0.75
+                    },
+                    {
+                        "role": "caption",
+                        "text_content_variable": "author",
+                        "font_variable": "sans_clean",
+                        "size_percent": 0.035,
+                        "x_percent": 0.5,
+                        "y_percent": 0.6,
+                        "color_variable": "white_dim",
+                        "alignment": "center"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "story_product_launch",
+            "name": "Story Product Launch",
+            "category": "social_media",
+            "tags": [
+                "story",
+                "product",
+                "launch",
+                "mobile",
+                "vertical"
+            ],
+            "description": "Dynamic vertical layout for highlighting a new product.",
+            "layout": {
+                "canvas_ratio": 0.5625,
+                "background_style": {
+                    "type": "image_fill",
+                    "opacity": 1.0
+                },
+                "elements": [
+                    {
+                        "type": "rect",
+                        "x_percent": 0.5,
+                        "y_percent": 0.85,
+                        "width_percent": 1.0,
+                        "height_percent": 0.35,
+                        "color_variable": "black",
+                        "layer_index": 1,
+                        "is_placeholder": false
+                    }
+                ],
+                "typography": [
+                    {
+                        "role": "hero",
+                        "text_content_variable": "title",
+                        "font_variable": "sans_bold",
+                        "size_percent": 0.06,
+                        "x_percent": 0.5,
+                        "y_percent": 0.8,
+                        "color_variable": "white",
+                        "alignment": "center"
+                    },
+                    {
+                        "role": "cta",
+                        "text_content_variable": "cta",
+                        "font_variable": "sans_medium",
+                        "size_percent": 0.03,
+                        "x_percent": 0.5,
+                        "y_percent": 0.9,
+                        "color_variable": "accent",
+                        "alignment": "center"
+                    }
+                ]
+            }
+        }
+    ]
+}

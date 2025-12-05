@@ -16,56 +16,37 @@ from PIL import Image, ImageDraw, ImageFont, ImageStat, ImageFilter
 import math
 
 class TextRenderer:
-    def __init__(self, font_dir: str = "data/fonts"):
+    def __init__(self, font_dir: str = "fonts"):
         self.font_dir = Path(font_dir)
-        self.font_dir.mkdir(parents=True, exist_ok=True)
 
-        # Google Fonts URLs (Direct TTF links - using static paths)
+        # Use existing fonts from fonts/ directory
         self.fonts = {
-            "Roboto": "https://github.com/google/fonts/raw/main/apache/roboto/static/Roboto-Regular.ttf",
-            "Roboto-Bold": "https://github.com/google/fonts/raw/main/apache/roboto/static/Roboto-Bold.ttf",
-            "PlayfairDisplay": "https://github.com/google/fonts/raw/main/ofl/playfairdisplay/static/PlayfairDisplay-Regular.ttf",
-            "Montserrat": "https://github.com/google/fonts/raw/main/ofl/montserrat/static/Montserrat-Bold.ttf",
-            "Oswald": "https://github.com/google/fonts/raw/main/ofl/oswald/static/Oswald-Bold.ttf"
+            "Inter": str(self.font_dir / "inter" / "Inter-Regular.ttf"),
+            "Inter-Bold": str(self.font_dir / "inter" / "Inter-Bold.ttf"),
+            "Inter-SemiBold": str(self.font_dir / "inter" / "Inter-SemiBold.ttf"),
+            "Montserrat": str(self.font_dir / "montserrat" / "Montserrat-Regular.ttf"),
+            "Montserrat-Bold": str(self.font_dir / "montserrat" / "Montserrat-Bold.ttf"),
+            "Poppins": str(self.font_dir / "poppins" / "Poppins-Regular.ttf"),
+            "Poppins-SemiBold": str(self.font_dir / "poppins" / "Poppins-SemiBold.ttf"),
         }
 
-        # System Font Fallbacks (Mac)
+        # System Font Fallbacks (Mac) - in case fonts/ is missing
         self.system_fonts = {
-            "Roboto": "/System/Library/Fonts/Helvetica.ttc",
-            "Roboto-Bold": "/System/Library/Fonts/Helvetica.ttc", # Helvetica doesn't have separate bold file usually, handled by index
-            "PlayfairDisplay": "/System/Library/Fonts/Times.ttc",
+            "Inter": "/System/Library/Fonts/Helvetica.ttc",
+            "Inter-Bold": "/System/Library/Fonts/Helvetica.ttc",
             "Montserrat": "/System/Library/Fonts/Supplemental/Arial.ttf",
-            "Oswald": "/System/Library/Fonts/Supplemental/Impact.ttf"
+            "Poppins": "/System/Library/Fonts/Helvetica.ttc"
         }
-
-        # Download fonts if missing
-        self._ensure_fonts()
-
-    def _ensure_fonts(self):
-        """Download missing fonts or setup fallbacks"""
-        for name, url in self.fonts.items():
-            font_path = self.font_dir / f"{name}.ttf"
-            if not font_path.exists():
-                # Try download
-                print(f"Downloading font: {name}...")
-                try:
-                    response = requests.get(url)
-                    response.raise_for_status()
-                    with open(font_path, 'wb') as f:
-                        f.write(response.content)
-                except Exception as e:
-                    print(f"❌ Failed to download {name}: {e}")
-                    # Fallback to system font if download failed
-                    if name in self.system_fonts and os.path.exists(self.system_fonts[name]):
-                        print(f"  Using system fallback: {self.system_fonts[name]}")
 
     def _get_font_path(self, font_name: str) -> str:
-        """Get path to font file (local download or system fallback)"""
-        local_path = self.font_dir / f"{font_name}.ttf"
-        if local_path.exists():
-            return str(local_path)
+        """Get path to font file (local or system fallback)"""
+        # Try local fonts first
+        if font_name in self.fonts:
+            local_path = Path(self.fonts[font_name])
+            if local_path.exists():
+                return str(local_path)
 
-        # Fallback
+        # Fallback to system fonts
         if font_name in self.system_fonts and os.path.exists(self.system_fonts[font_name]):
             return self.system_fonts[font_name]
 
@@ -74,11 +55,11 @@ class TextRenderer:
     def _get_font_for_tone(self, tone: float) -> str:
         """Select font based on emotional tone"""
         if tone < 0.4:
-            return "PlayfairDisplay" # Elegant, Calm
+            return "Poppins"  # Elegant, Calm
         elif tone < 0.7:
-            return "Roboto-Bold"     # Professional, Neutral
+            return "Inter-Bold"  # Professional, Neutral
         else:
-            return "Montserrat"      # Bold, Energetic
+            return "Montserrat-Bold"  # Bold, Energetic
 
     def _get_text_color(self, image: Image.Image, box: Tuple[int, int, int, int]) -> str:
         """
@@ -262,5 +243,82 @@ class TextRenderer:
         sub_y = best_y + text_h + 10
 
         self._draw_text_with_shadow(draw, (best_x, sub_y), subhead, sub_font, text_color, shadow_color, anchor=anchor)
+
+        return image
+
+class EnhancedTextRenderer(TextRenderer):
+    def render_hero_typography(self, image: Image.Image, spec: dict) -> Image.Image:
+        """
+        Render visually striking text treatments
+        """
+        text = spec.get("text", "HERO TEXT")
+        treatment = spec.get("treatment", "standard")
+
+        if treatment == "cropped":
+            return self._render_cropped_text(image, text, spec)
+        elif treatment == "outlined":
+            return self._render_outlined_text(image, text, spec)
+        else:
+            # Fallback to standard render but with enhanced specs
+            return self.render_text(image, {"v_Goal": 3, "v_Tone": 0.9}) # Force bold/inspire
+
+    def _render_cropped_text(self, image: Image.Image, text: str, spec: dict) -> Image.Image:
+        """
+        Render oversized text with intentional canvas cropping
+        """
+        draw = ImageDraw.Draw(image)
+        w, h = image.size
+
+        # Huge font size
+        font_size = int(h * 0.4)
+        font_path = self._get_font_path("Montserrat-Bold") # Bold font
+        try:
+            font = ImageFont.truetype(font_path, font_size)
+        except:
+            font = ImageFont.load_default()
+
+        # Position to cut off edges
+        bbox = draw.textbbox((0, 0), text, font=font)
+        text_w = bbox[2] - bbox[0]
+        text_h = bbox[3] - bbox[1]
+
+        x = (w - text_w) // 2
+        y = (h - text_h) // 2
+
+        # Draw with slight transparency
+        color = spec.get("color", "#FFFFFF")
+        # Convert hex to RGB
+        hex_color = color.lstrip('#')
+        c = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+        # Create text layer
+        txt_layer = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+        txt_draw = ImageDraw.Draw(txt_layer)
+        txt_draw.text((x, y), text, font=font, fill=(c[0], c[1], c[2], 200))
+
+        # Composite
+        return Image.alpha_composite(image.convert('RGBA'), txt_layer).convert('RGB')
+
+    def _render_outlined_text(self, image: Image.Image, text: str, spec: dict) -> Image.Image:
+        """
+        Render outlined text (hollow)
+        """
+        draw = ImageDraw.Draw(image)
+        w, h = image.size
+
+        font_size = int(h * 0.15)
+        font_path = self._get_font_path("Montserrat-Bold")
+        try:
+            font = ImageFont.truetype(font_path, font_size)
+        except:
+            font = ImageFont.load_default()
+
+        x, y = w // 2, h // 2
+
+        # Draw outline by drawing text multiple times with offset or using stroke_width (if supported)
+        # Pillow 10+ supports stroke_width
+        color = spec.get("color", "#FFFFFF")
+
+        draw.text((x, y), text, font=font, fill=None, stroke_width=3, stroke_fill=color, anchor="mm")
 
         return image

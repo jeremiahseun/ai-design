@@ -11,7 +11,14 @@ import random
 from typing import Tuple, List, Optional
 from PIL import Image, ImageDraw
 import torch
-from ..models.sd_decoder import SDDecoder
+
+# Optional import - SD decoder not strictly required
+try:
+    from ..models.sd_decoder import SDDecoder
+    HAS_SD_DECODER = True
+except ImportError:
+    HAS_SD_DECODER = False
+
 from .procedural_background import RefinedBackgroundGenerator
 
 class AssetGenerator:
@@ -77,3 +84,88 @@ class AssetGenerator:
         """Generate solid color"""
         color = random.choice(["#FFFFFF", "#F0F0F0", "#1A1A1A", "#000000"])
         return Image.new('RGB', (width, height), color)
+
+class EnhancedAssetGenerator(AssetGenerator):
+    def generate_advanced_background(self, spec: dict, width: int, height: int) -> Image.Image:
+        """
+        Generate complex, layered backgrounds based on spec
+        """
+        # Base gradient
+        base = self._create_multipoint_gradient(spec.get("gradient", {}), width, height)
+
+        # Texture
+        if spec.get("texture"):
+            texture = self._generate_noise_texture(
+                spec["texture"].get("type", "grain"),
+                spec["texture"].get("intensity", 0.1),
+                width, height
+            )
+            base = Image.blend(base, texture, alpha=0.15)
+
+        return base
+
+    def _create_multipoint_gradient(self, gradient_spec: dict, width: int, height: int) -> Image.Image:
+        """
+        Create gradient with custom stops
+        """
+        stops = gradient_spec.get("stops", [(0.0, "#FF6B6B"), (1.0, "#4ECDC4")])
+        angle = gradient_spec.get("angle", 45)
+
+        # Simplified implementation: Linear interpolation between stops
+        # In a real implementation, we'd handle angle and complex easing
+        base = Image.new('RGB', (width, height), "#FFFFFF")
+        draw = ImageDraw.Draw(base)
+
+        # Convert hex stops to RGB
+        rgb_stops = []
+        for pos, hex_c in stops:
+            hex_c = hex_c.lstrip('#')
+            rgb = tuple(int(hex_c[i:i+2], 16) for i in (0, 2, 4))
+            rgb_stops.append((pos, rgb))
+
+        # Sort by position
+        rgb_stops.sort(key=lambda x: x[0])
+
+        # Draw vertical gradient for now (simplification)
+        for y in range(height):
+            norm_y = y / height
+
+            # Find surrounding stops
+            start_stop = rgb_stops[0]
+            end_stop = rgb_stops[-1]
+
+            for i in range(len(rgb_stops) - 1):
+                if rgb_stops[i][0] <= norm_y <= rgb_stops[i+1][0]:
+                    start_stop = rgb_stops[i]
+                    end_stop = rgb_stops[i+1]
+                    break
+
+            # Interpolate
+            t = (norm_y - start_stop[0]) / (end_stop[0] - start_stop[0]) if end_stop[0] != start_stop[0] else 0
+
+            r = int(start_stop[1][0] + (end_stop[1][0] - start_stop[1][0]) * t)
+            g = int(start_stop[1][1] + (end_stop[1][1] - start_stop[1][1]) * t)
+            b = int(start_stop[1][2] + (end_stop[1][2] - start_stop[1][2]) * t)
+
+            draw.line([(0, y), (width, y)], fill=(r, g, b))
+
+        return base
+
+    def _generate_noise_texture(self, type: str, intensity: float, width: int, height: int) -> Image.Image:
+        """
+        Generate procedural texture
+        """
+        img = Image.new('RGB', (width, height), (128, 128, 128))
+        pixels = img.load()
+
+        import random
+        for y in range(height):
+            for x in range(width):
+                noise = random.randint(-int(255*intensity), int(255*intensity))
+                r, g, b = pixels[x, y]
+                pixels[x, y] = (
+                    max(0, min(255, r + noise)),
+                    max(0, min(255, g + noise)),
+                    max(0, min(255, b + noise))
+                )
+        return img

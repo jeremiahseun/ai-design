@@ -47,18 +47,149 @@ class DesignKnowledge:
             self._compute_embeddings()
 
     def _initialize_knowledge_base(self):
-        """Define the seed knowledge base."""
-        # Fonts
+        """
+    Define comprehensive design knowledge base for semantic retrieval.
+    Each concept includes rich descriptors for CLIP embedding matching.
+    """
+
+    # ═══════════════════════════════════════════════════════════════
+    # TYPOGRAPHY - Expanded with modern and display fonts
+    # ═══════════════════════════════════════════════════════════════
         self.concepts.extend([
-            DesignConcept("font", "Didot", "luxury elegant serif high-fashion traditional premium"),
-            DesignConcept("font", "Bodoni", "modern serif sharp contrast vogue editorial"),
-            DesignConcept("font", "Garamond", "classic literary readable bookish timeless"),
-            DesignConcept("font", "Helvetica", "neutral modern clean swiss objective corporate"),
-            DesignConcept("font", "Futura", "geometric modern bauhaus forward tech"),
-            DesignConcept("font", "Gill Sans", "humanist sans friendly british warm"),
-            DesignConcept("font", "Courier", "code typewriter technical brutalist raw"),
-            DesignConcept("font", "Brush Script", "handwritten casual personal playful"),
-        ])
+        # Classic Serifs
+        DesignConcept(
+            "font", "Didot",
+            "luxury elegant serif high-fashion traditional premium upscale vogue editorial refined french neoclassical"
+        ),
+        DesignConcept(
+            "font", "Bodoni",
+            "modern serif sharp contrast vogue editorial dramatic hairline geometric italian fashion magazine"
+        ),
+        DesignConcept(
+            "font", "Garamond",
+            "classic literary readable bookish timeless traditional warm old-style renaissance humanist text"
+        ),
+        DesignConcept(
+            "font", "Baskerville",
+            "transitional serif elegant formal traditional british refined classic authority publishing"
+        ),
+        DesignConcept(
+            "font", "Caslon",
+            "colonial historical traditional bookish warm classic british americana text refined"
+        ),
+
+        # Modern Serifs
+        DesignConcept(
+            "font", "Playfair Display",
+            "high-contrast elegant display serif editorial luxury web modern fashion sophisticated decorative"
+        ),
+        DesignConcept(
+            "font", "Merriweather",
+            "readable web serif friendly warm approachable blog text comfortable"
+        ),
+
+        # Sans Serifs - Geometric
+        DesignConcept(
+            "font", "Helvetica",
+            "neutral modern clean swiss objective corporate professional standard minimalist timeless international"
+        ),
+        DesignConcept(
+            "font", "Futura",
+            "geometric modern bauhaus forward tech circular art-deco space-age streamlined progressive"
+        ),
+        DesignConcept(
+            "font", "Avenir",
+            "geometric humanist modern friendly balanced professional warm clean versatile"
+        ),
+        DesignConcept(
+            "font", "Gotham",
+            "geometric american modern strong authoritative clean bold straightforward urban"
+        ),
+        DesignConcept(
+            "font", "Circular",
+            "geometric rounded modern tech friendly startup web clean spotify warm"
+        ),
+
+        # Sans Serifs - Humanist
+        DesignConcept(
+            "font", "Gill Sans",
+            "humanist sans friendly british warm classic readable elegant johnston proportional"
+        ),
+        DesignConcept(
+            "font", "Frutiger",
+            "humanist clean readable airport signage wayfinding professional clear swiss modern"
+        ),
+        DesignConcept(
+            "font", "Open Sans",
+            "humanist neutral readable web google friendly accessible professional clean"
+        ),
+
+        # Sans Serifs - Grotesque/Neo-Grotesque
+        DesignConcept(
+            "font", "Akzidenz-Grotesk",
+            "grotesque industrial modern neutral functional pre-helvetica authentic raw"
+        ),
+        DesignConcept(
+            "font", "Univers",
+            "neo-grotesque systematic modern swiss clean objective structured comprehensive"
+        ),
+
+        # Display & Decorative
+        DesignConcept(
+            "font", "Bebas Neue",
+            "display condensed bold uppercase impact poster headline strong masculine industrial"
+        ),
+        DesignConcept(
+            "font", "Montserrat",
+            "geometric sans modern urban clean web startup tech friendly versatile"
+        ),
+        DesignConcept(
+            "font", "Oswald",
+            "condensed gothic narrow strong web headline bold impactful authoritative"
+        ),
+        DesignConcept(
+            "font", "Raleway",
+            "elegant thin refined modern fashion minimalist clean sophisticated web"
+        ),
+        DesignConcept(
+            "font", "Poppins",
+            "geometric modern circular friendly web tech startup clean readable"
+        ),
+
+        # Script & Handwritten
+        DesignConcept(
+            "font", "Brush Script",
+            "handwritten casual personal playful vintage retro signage americana brush"
+        ),
+        DesignConcept(
+            "font", "Pacifico",
+            "script brush casual surf retro vintage friendly playful beach handwritten"
+        ),
+
+        # Monospace & Technical
+        DesignConcept(
+            "font", "Courier",
+            "monospace typewriter technical brutalist raw code terminal vintage mechanical"
+        ),
+        DesignConcept(
+            "font", "Consolas",
+            "monospace code programming technical modern clean terminal developer screen"
+        ),
+        DesignConcept(
+            "font", "Source Code Pro",
+            "monospace code programming technical modern clean readable developer terminal"
+        ),
+
+        # Brutalist & Experimental
+        DesignConcept(
+            "font", "Arial Black",
+            "bold heavy impact strong display headline aggressive dominant"
+        ),
+        DesignConcept(
+            "font", "Impact",
+            "bold condensed heavy strong meme internet headline display aggressive"
+        ),
+    ])
 
         # Colors (Hex + Description)
         self.concepts.extend([

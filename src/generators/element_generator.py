@@ -108,4 +108,70 @@ class ElementGenerator:
 
     def _hex_to_rgb(self, hex_color: str) -> Tuple[int, int, int]:
         hex_color = hex_color.lstrip('#')
-        return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+        if len(hex_color) == 3:
+            hex_color = ''.join([c*2 for c in hex_color])
+
+        if len(hex_color) != 6:
+            # Fallback for invalid color codes
+            return (128, 128, 128)
+
+        try:
+            return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+        except ValueError:
+            return (128, 128, 128)
+
+    def generate_organic_blob(self, width: int, height: int, color: str) -> Image.Image:
+        """
+        Create organic, flowing shapes using bezier curves
+        """
+        img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(img)
+
+        c = self._hex_to_rgb(color)
+        fill_color = (c[0], c[1], c[2], 200) # Slightly transparent
+
+        # Simple blob implementation using a polygon with random variations
+        center_x, center_y = width // 2, height // 2
+        radius = min(width, height) // 3
+        points = []
+        import math
+        num_points = 12
+        for i in range(num_points):
+            angle = i * 2 * math.pi / num_points
+            # Randomize radius for organic feel
+            r = radius * random.uniform(0.8, 1.2)
+            x = center_x + r * math.cos(angle)
+            y = center_y + r * math.sin(angle)
+            points.append((x, y))
+
+        # Smooth polygon (simplified as polygon for now, ideally would use bezier)
+        draw.polygon(points, fill=fill_color)
+        return img
+
+    def generate_fragmented_shape(self, width: int, height: int, color: str) -> Image.Image:
+        """
+        Create broken/scattered geometric fragments
+        """
+        img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(img)
+
+        c = self._hex_to_rgb(color)
+
+        # Create multiple small shards
+        num_shards = random.randint(3, 7)
+        for _ in range(num_shards):
+            # Random shard
+            shard_w = random.randint(width // 10, width // 4)
+            shard_h = random.randint(height // 10, height // 4)
+            x = random.randint(0, width - shard_w)
+            y = random.randint(0, height - shard_h)
+
+            opacity = random.randint(100, 255)
+            fill = (c[0], c[1], c[2], opacity)
+
+            if random.random() > 0.5:
+                draw.rectangle([x, y, x+shard_w, y+shard_h], fill=fill)
+            else:
+                draw.ellipse([x, y, x+shard_w, y+shard_h], fill=fill)
+
+        return img

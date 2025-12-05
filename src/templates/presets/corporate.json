@@ -1,0 +1,149 @@
+{
+    "category": "corporate",
+    "templates": [
+        {
+            "id": "corp_event_poster",
+            "name": "Corporate Event Poster",
+            "category": "corporate",
+            "tags": [
+                "event",
+                "poster",
+                "business",
+                "conference",
+                "formal"
+            ],
+            "description": "Standard split-layout poster for business conferences or events.",
+            "layout": {
+                "canvas_ratio": 0.75,
+                "background_style": {
+                    "type": "gradient",
+                    "direction": "vertical",
+                    "colors": [
+                        "white",
+                        "light_grey"
+                    ]
+                },
+                "elements": [
+                    {
+                        "type": "rect",
+                        "x_percent": 0.5,
+                        "y_percent": 0.0,
+                        "width_percent": 1.0,
+                        "height_percent": 0.4,
+                        "color_variable": "primary",
+                        "layer_index": 0,
+                        "is_placeholder": false
+                    },
+                    {
+                        "type": "circle",
+                        "x_percent": 0.85,
+                        "y_percent": 0.38,
+                        "width_percent": 0.2,
+                        "height_percent": 0.15,
+                        "color_variable": "accent",
+                        "layer_index": 1,
+                        "is_placeholder": false
+                    }
+                ],
+                "typography": [
+                    {
+                        "role": "hero",
+                        "text_content_variable": "title",
+                        "font_variable": "sans_bold",
+                        "size_percent": 0.07,
+                        "x_percent": 0.1,
+                        "y_percent": 0.15,
+                        "color_variable": "white",
+                        "alignment": "left",
+                        "max_width_percent": 0.8
+                    },
+                    {
+                        "role": "subheading",
+                        "text_content_variable": "date",
+                        "font_variable": "sans_medium",
+                        "size_percent": 0.03,
+                        "x_percent": 0.1,
+                        "y_percent": 0.25,
+                        "color_variable": "white_dim",
+                        "alignment": "left"
+                    },
+                    {
+                        "role": "body",
+                        "text_content_variable": "details",
+                        "font_variable": "serif_body",
+                        "size_percent": 0.025,
+                        "x_percent": 0.1,
+                        "y_percent": 0.5,
+                        "color_variable": "black",
+                        "alignment": "left",
+                        "max_width_percent": 0.8
+                    }
+                ]
+            }
+        },
+        {
+            "id": "corp_announcement",
+            "name": "Company Announcement",
+            "category": "corporate",
+            "tags": [
+                "announcement",
+                "banner",
+                "linkedin",
+                "news"
+            ],
+            "description": "Horizontal banner for major company news.",
+            "layout": {
+                "canvas_ratio": 1.91,
+                "background_style": {
+                    "type": "solid",
+                    "color_variable": "white"
+                },
+                "elements": [
+                    {
+                        "type": "pill",
+                        "x_percent": 0.1,
+                        "y_percent": 0.1,
+                        "width_percent": 0.2,
+                        "height_percent": 0.15,
+                        "color_variable": "accent",
+                        "layer_index": 2,
+                        "is_placeholder": false
+                    },
+                    {
+                        "type": "blob",
+                        "x_percent": 0.8,
+                        "y_percent": 0.5,
+                        "width_percent": 0.4,
+                        "height_percent": 0.8,
+                        "color_variable": "secondary_light",
+                        "layer_index": 0,
+                        "is_placeholder": true
+                    }
+                ],
+                "typography": [
+                    {
+                        "role": "caption",
+                        "text_content_variable": "category",
+                        "font_variable": "sans_bold_caps",
+                        "size_percent": 0.05,
+                        "x_percent": 0.12,
+                        "y_percent": 0.14,
+                        "color_variable": "white",
+                        "alignment": "left"
+                    },
+                    {
+                        "role": "hero",
+                        "text_content_variable": "headline",
+                        "font_variable": "serif_display",
+                        "size_percent": 0.12,
+                        "x_percent": 0.1,
+                        "y_percent": 0.4,
+                        "color_variable": "primary",
+                        "alignment": "left",
+                        "max_width_percent": 0.6
+                    }
+                ]
+            }
+        }
+    ]
+}

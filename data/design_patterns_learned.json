@@ -1,0 +1,25 @@
+{
+  "aspect_ratio_distribution": {
+    "square (0.9-1.1)": 100,
+    "vertical (0.5-0.8)": 0,
+    "horizontal (1.2-2.5)": 0
+  },
+  "layout_types": {
+    "balanced": 76,
+    "split_horizontal": 19,
+    "split_vertical": 5
+  },
+  "text_positions": {
+    "middle": 43,
+    "bottom": 18,
+    "left": 14,
+    "right": 13,
+    "top": 12
+  },
+  "avg_grammar": {
+    "alignment": 0.7391967260837555,
+    "contrast": 0.03497391955927014,
+    "whitespace": 0.5607874542474747,
+    "hierarchy": 0.9668528199195862
+  }
+}

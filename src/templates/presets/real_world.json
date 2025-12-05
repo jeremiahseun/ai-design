@@ -1,0 +1,128 @@
+{
+    "category": "real_world",
+    "templates": [
+        {
+            "id": "real_balanced_center",
+            "name": "Balanced Focus",
+            "category": "real_world",
+            "tags": [
+                "balanced",
+                "center",
+                "focus",
+                "clean",
+                "professional"
+            ],
+            "description": "The most common pattern (76%): Perfectly balanced layout with central focus.",
+            "recommended_styles": [
+                "Minimal",
+                "Editorial"
+            ],
+            "layout": {
+                "canvas_ratio": 1.0,
+                "background_style": {
+                    "type": "image_fill",
+                    "opacity": 1.0
+                },
+                "elements": [
+                    {
+                        "type": "rect",
+                        "name": "central_frame",
+                        "x_percent": 0.5,
+                        "y_percent": 0.5,
+                        "width_percent": 0.85,
+                        "height_percent": 0.85,
+                        "color_variable": "white_dim",
+                        "shape_style": {
+                            "stroke_width": 2
+                        },
+                        "layer_index": 1,
+                        "is_placeholder": false
+                    }
+                ],
+                "typography": [
+                    {
+                        "role": "hero",
+                        "text_content_variable": "headline",
+                        "font_variable": "serif_display",
+                        "size_percent": 0.08,
+                        "x_percent": 0.5,
+                        "y_percent": 0.45,
+                        "color_variable": "white",
+                        "alignment": "center",
+                        "max_width_percent": 0.7
+                    },
+                    {
+                        "role": "subheading",
+                        "text_content_variable": "subheading",
+                        "font_variable": "sans_clean",
+                        "size_percent": 0.03,
+                        "x_percent": 0.5,
+                        "y_percent": 0.55,
+                        "color_variable": "white",
+                        "alignment": "center"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "real_bottom_anchor",
+            "name": "Bottom Anchor",
+            "category": "real_world",
+            "tags": [
+                "bottom",
+                "overlay",
+                "modern",
+                "story"
+            ],
+            "description": "Second common pattern (18%): Text anchored at bottom with gradient overlay.",
+            "recommended_styles": [
+                "Modern",
+                "Bold"
+            ],
+            "layout": {
+                "canvas_ratio": 1.0,
+                "background_style": {
+                    "type": "image_fill",
+                    "opacity": 1.0
+                },
+                "elements": [
+                    {
+                        "type": "rect",
+                        "name": "bottom_gradient",
+                        "x_percent": 0.5,
+                        "y_percent": 1.0,
+                        "width_percent": 1.0,
+                        "height_percent": 0.6,
+                        "color_variable": "black",
+                        "opacity": 0.7,
+                        "layer_index": 1,
+                        "is_placeholder": false
+                    }
+                ],
+                "typography": [
+                    {
+                        "role": "hero",
+                        "text_content_variable": "headline",
+                        "font_variable": "sans_bold",
+                        "size_percent": 0.1,
+                        "x_percent": 0.1,
+                        "y_percent": 0.75,
+                        "color_variable": "white",
+                        "alignment": "left",
+                        "max_width_percent": 0.8
+                    },
+                    {
+                        "role": "cta",
+                        "text_content_variable": "cta",
+                        "font_variable": "sans_bold_caps",
+                        "size_percent": 0.03,
+                        "x_percent": 0.1,
+                        "y_percent": 0.9,
+                        "color_variable": "accent",
+                        "alignment": "left"
+                    }
+                ]
+            }
+        }
+    ]
+}
