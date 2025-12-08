@@ -1,0 +1,303 @@
+{
+  "category": "Learned Patterns V2",
+  "templates": [
+    {
+      "id": "learned_asymmetric_single_hero_center",
+      "name": "Learned Asymmetric Single Hero Center",
+      "description": "Strictly aligned pattern from 6 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.45,
+            "width_percent": 0.5,
+            "height_percent": 0.6,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline_0",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.15,
+            "x_percent": 0.5,
+            "y_percent": 0.22,
+            "width_percent": 0.6,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "subheading_1",
+            "role": "subheading",
+            "text_content_variable": "subheading",
+            "font_variable": "body",
+            "size_percent": 0.03,
+            "x_percent": 0.5,
+            "y_percent": 0.28,
+            "width_percent": 0.25,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body_2",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.1,
+            "x_percent": 0.25,
+            "y_percent": 0.72,
+            "width_percent": 0.3,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "cta_3",
+            "role": "cta",
+            "text_content_variable": "cta",
+            "font_variable": "body",
+            "size_percent": 0.04,
+            "x_percent": 0.75,
+            "y_percent": 0.8,
+            "width_percent": 0.2,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "caption_4",
+            "role": "caption",
+            "text_content_variable": "caption",
+            "font_variable": "body",
+            "size_percent": 0.04,
+            "x_percent": 0.75,
+            "y_percent": 0.8899999999999999,
+            "width_percent": 0.2,
+            "alignment": "center",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v2",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_centered_single_hero_center",
+      "name": "Learned Centered Single Hero Center",
+      "description": "Strictly aligned pattern from 7 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.5,
+            "width_percent": 0.8,
+            "height_percent": 0.6,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline_0",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.1,
+            "x_percent": 0.5,
+            "y_percent": 0.24,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "subheading_1",
+            "role": "subheading",
+            "text_content_variable": "subheading",
+            "font_variable": "body",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.24,
+            "width_percent": 0.9,
+            "alignment": "center",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v2",
+        "centered"
+      ]
+    },
+    {
+      "id": "learned_asymmetric_text_only_center",
+      "name": "Learned Asymmetric Text Only Center",
+      "description": "Strictly aligned pattern from 4 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [],
+        "typography": [],
+        "background": {
+          "type": "gradient"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v2",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_centered_text_only_center",
+      "name": "Learned Centered Text Only Center",
+      "description": "Strictly aligned pattern from 6 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.45,
+            "width_percent": 0.65,
+            "height_percent": 0.4,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline_0",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.2,
+            "x_percent": 0.5,
+            "y_percent": 0.3,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v2",
+        "centered"
+      ]
+    },
+    {
+      "id": "learned_asymmetric_single_hero_left",
+      "name": "Learned Asymmetric Single Hero Left",
+      "description": "Strictly aligned pattern from 4 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.4,
+            "y_percent": 0.4,
+            "width_percent": 0.6,
+            "height_percent": 0.6499999999999999,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline_0",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.1,
+            "x_percent": 0.5,
+            "y_percent": 0.3,
+            "width_percent": 0.45,
+            "alignment": "left",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "subheading_1",
+            "role": "subheading",
+            "text_content_variable": "subheading",
+            "font_variable": "body",
+            "size_percent": 0.05,
+            "x_percent": 0.5700000000000001,
+            "y_percent": 0.415,
+            "width_percent": 0.35,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body_2",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.5,
+            "width_percent": 0.5,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "cta_3",
+            "role": "cta",
+            "text_content_variable": "cta",
+            "font_variable": "body",
+            "size_percent": 0.04,
+            "x_percent": 0.5,
+            "y_percent": 0.5,
+            "width_percent": 0.175,
+            "alignment": "center",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v2",
+        "asymmetric"
+      ]
+    }
+  ]
+}

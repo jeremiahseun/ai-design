@@ -118,7 +118,6 @@ class FeatureExtractor:
         try:
             import torch
             import sys
-            sys.path.append('src')
             from core.schemas import F_Tensor, DEVICE
 
             # Extract to numpy
@@ -217,7 +216,6 @@ def validate_alignment(design: Dict[str, Any], f_tensor: np.ndarray,
 if __name__ == '__main__':
     # Test the extractor
     import sys
-    sys.path.append('src')
     from generators.generator import DesignGenerator
 
     print("=" * 60)

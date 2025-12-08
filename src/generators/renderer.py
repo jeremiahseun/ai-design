@@ -166,7 +166,6 @@ class DesignRenderer:
         """
         try:
             import sys
-            sys.path.append('src')
             from core.schemas import P_Image
 
             # Render to numpy
@@ -192,7 +191,6 @@ def visualize_design(design: Dict[str, Any], output_path: str = 'data/rendered_d
 if __name__ == '__main__':
     # Test the renderer
     import sys
-    sys.path.append('src')
     from generators.generator import DesignGenerator
 
     print("=" * 60)

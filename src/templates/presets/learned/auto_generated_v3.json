@@ -1,0 +1,801 @@
+{
+  "category": "Learned Patterns V3 (Exemplar)",
+  "templates": [
+    {
+      "id": "learned_asymmetric_single_hero_center",
+      "name": "Learned Asymmetric Single Hero Center",
+      "description": "Exemplar extracted from 39 designs. Original: Centered title and photo, asymmetric text content, strong vertical orientation.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.5,
+            "width_percent": 0.7,
+            "height_percent": 0.6,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.1,
+            "x_percent": 0.5,
+            "y_percent": 0.12,
+            "width_percent": 0.9,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "headline_1",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.05,
+            "width_percent": 0.9,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "body",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.1,
+            "x_percent": 0.25,
+            "y_percent": 0.45,
+            "width_percent": 0.3,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body_1",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.2,
+            "x_percent": 0.75,
+            "y_percent": 0.85,
+            "width_percent": 0.3,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "tag",
+            "role": "tag",
+            "text_content_variable": "tag",
+            "font_variable": "body",
+            "size_percent": 0.03,
+            "x_percent": 0.75,
+            "y_percent": 0.95,
+            "width_percent": 0.1,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body_2",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.18,
+            "width_percent": 0.9,
+            "alignment": "center",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_centered_single_hero_center",
+      "name": "Learned Centered Single Hero Center",
+      "description": "Exemplar extracted from 37 designs. Original: Centered layout with primary content anchored at the bottom of the frame. An abstract textured visual element supports the main image.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.45,
+            "width_percent": 0.5,
+            "height_percent": 0.3,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.1,
+            "x_percent": 0.5,
+            "y_percent": 0.23,
+            "width_percent": 0.5,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "body",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.15,
+            "x_percent": 0.75,
+            "y_percent": 0.35,
+            "width_percent": 0.23,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "headline_1",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.05,
+            "width_percent": 0.7,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "centered"
+      ]
+    },
+    {
+      "id": "learned_asymmetric_text_only_center",
+      "name": "Learned Asymmetric Text Only Center",
+      "description": "Exemplar extracted from 34 designs. Original: The layout features diagonally arranged elements with text at the top and a smaller text element at the bottom. Large circular color gradients provide visual interest and asymmetrical balance. There is a clear top and bottom anchor.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [],
+        "typography": [
+          {
+            "id": "headline",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.2,
+            "x_percent": 0.5,
+            "y_percent": 0.15,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "tag",
+            "role": "tag",
+            "text_content_variable": "tag",
+            "font_variable": "body",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.9,
+            "width_percent": 0.4,
+            "alignment": "center",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "texture"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_centered_text_only_center",
+      "name": "Learned Centered Text Only Center",
+      "description": "Exemplar extracted from 25 designs. Original: Text is vertically centered with an artistic splash effect, slightly asymmetric due to the splash elements.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [],
+        "typography": [
+          {
+            "id": "headline",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.2,
+            "x_percent": 0.5,
+            "y_percent": 0.3,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "headline_1",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.2,
+            "x_percent": 0.5,
+            "y_percent": 0.5,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "headline_2",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.2,
+            "x_percent": 0.5,
+            "y_percent": 0.7,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "centered"
+      ]
+    },
+    {
+      "id": "learned_asymmetric_single_hero_left",
+      "name": "Learned Asymmetric Single Hero Left",
+      "description": "Exemplar extracted from 21 designs. Original: The design features an asymmetrical arrangement with the subject on the right and text elements layered in the background and foreground, anchored to the bottom of the design.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.75,
+            "y_percent": 0.4,
+            "width_percent": 0.5,
+            "height_percent": 0.7,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.1,
+            "x_percent": 0.39,
+            "y_percent": 0.78,
+            "width_percent": 0.5,
+            "alignment": "left",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "subheading",
+            "role": "subheading",
+            "text_content_variable": "subheading",
+            "font_variable": "body",
+            "size_percent": 0.04,
+            "x_percent": 0.49,
+            "y_percent": 0.87,
+            "width_percent": 0.4,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.15,
+            "x_percent": 0.45,
+            "y_percent": 0.5,
+            "width_percent": 0.5,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body_1",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.2,
+            "x_percent": 0.22,
+            "y_percent": 0.14,
+            "width_percent": 0.2,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "caption",
+            "role": "caption",
+            "text_content_variable": "caption",
+            "font_variable": "body",
+            "size_percent": 0.03,
+            "x_percent": 0.5,
+            "y_percent": 0.97,
+            "width_percent": 0.9,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "caption_1",
+            "role": "caption",
+            "text_content_variable": "caption",
+            "font_variable": "body",
+            "size_percent": 0.02,
+            "x_percent": 0.5,
+            "y_percent": 0.04,
+            "width_percent": 0.4,
+            "alignment": "center",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_asymmetric_text_only_left",
+      "name": "Learned Asymmetric Text Only Left",
+      "description": "Exemplar extracted from 5 designs. Original: The statue dominates the upper half of the image, with text and a circular element anchored to the bottom left and right respectively. The design feels modern and tech-focused.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [],
+        "typography": [
+          {
+            "id": "headline",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.1,
+            "x_percent": 0.4,
+            "y_percent": 0.75,
+            "width_percent": 0.5,
+            "alignment": "left",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "subheading",
+            "role": "subheading",
+            "text_content_variable": "subheading",
+            "font_variable": "body",
+            "size_percent": 0.05,
+            "x_percent": 0.28,
+            "y_percent": 0.7,
+            "width_percent": 0.2,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "tag",
+            "role": "tag",
+            "text_content_variable": "tag",
+            "font_variable": "body",
+            "size_percent": 0.02,
+            "x_percent": 0.1,
+            "y_percent": 0.05,
+            "width_percent": 0.15,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "tag_1",
+            "role": "tag",
+            "text_content_variable": "tag",
+            "font_variable": "body",
+            "size_percent": 0.02,
+            "x_percent": 0.5,
+            "y_percent": 0.05,
+            "width_percent": 0.15,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "tag_2",
+            "role": "tag",
+            "text_content_variable": "tag",
+            "font_variable": "body",
+            "size_percent": 0.02,
+            "x_percent": 0.9,
+            "y_percent": 0.05,
+            "width_percent": 0.15,
+            "alignment": "left",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_grid_single_hero_center",
+      "name": "Learned Grid Single Hero Center",
+      "description": "Exemplar extracted from 9 designs. Original: The design consists of a 2x3 grid of square images. Within each square, the layout is asymmetric with text at the top and image elements occupying the majority of the space. Each square contains a visual pun.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.5,
+            "width_percent": 0.8,
+            "height_percent": 0.6,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.2,
+            "x_percent": 0.5,
+            "y_percent": 0.15,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "body",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.15,
+            "x_percent": 0.5,
+            "y_percent": 0.8,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "grid"
+      ]
+    },
+    {
+      "id": "learned_split_text_only_center",
+      "name": "Learned Split Text Only Center",
+      "description": "Exemplar extracted from 5 designs. Original: The image is split vertically, with two distinct stylistic approaches to the same subject. The left side features a stylized, almost pop-art-like rendering with bold colors and halftone patterns. The right side displays a realistic photograph.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [],
+        "typography": [],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "split"
+      ]
+    },
+    {
+      "id": "learned_asymmetric_multi_image_center",
+      "name": "Learned Asymmetric Multi Image Center",
+      "description": "Exemplar extracted from 6 designs. Original: The layout features a strong asymmetry, with the subject's face and the car image dominating the upper and lower portions, respectively. The text is anchored to the bottom and aligned center.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.4,
+            "width_percent": 1.0,
+            "height_percent": 0.6,
+            "layer_index": 0,
+            "is_placeholder": true
+          },
+          {
+            "type": "image",
+            "x_percent": 0.25,
+            "y_percent": 0.75,
+            "width_percent": 0.6,
+            "height_percent": 0.4,
+            "layer_index": 0,
+            "is_placeholder": true
+          },
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.4,
+            "width_percent": 1.0,
+            "height_percent": 1.0,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.84,
+            "width_percent": 0.4,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "subheading",
+            "role": "subheading",
+            "text_content_variable": "subheading",
+            "font_variable": "body",
+            "size_percent": 0.02,
+            "x_percent": 0.5,
+            "y_percent": 0.8,
+            "width_percent": 0.4,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.08,
+            "x_percent": 0.5,
+            "y_percent": 0.92,
+            "width_percent": 0.5,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "caption",
+            "role": "caption",
+            "text_content_variable": "caption",
+            "font_variable": "body",
+            "size_percent": 0.02,
+            "x_percent": 0.08,
+            "y_percent": 0.98,
+            "width_percent": 0.2,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "tag",
+            "role": "tag",
+            "text_content_variable": "tag",
+            "font_variable": "body",
+            "size_percent": 0.04,
+            "x_percent": 0.2,
+            "y_percent": 0.04,
+            "width_percent": 0.2,
+            "alignment": "left",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "photo"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_asymmetric_multi_image_left",
+      "name": "Learned Asymmetric Multi Image Left",
+      "description": "Exemplar extracted from 7 designs. Original: The design features a top section with an image and title, a central area with stats and further images, and a bottom section with a call to action. It appears to be split up by content sections.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.2,
+            "y_percent": 0.15,
+            "width_percent": 0.35,
+            "height_percent": 0.2,
+            "layer_index": 0,
+            "is_placeholder": true
+          },
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.25,
+            "width_percent": 0.2,
+            "height_percent": 0.2,
+            "layer_index": 0,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.08,
+            "x_percent": 0.25,
+            "y_percent": 0.25,
+            "width_percent": 0.7,
+            "alignment": "left",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "subheading",
+            "role": "subheading",
+            "text_content_variable": "subheading",
+            "font_variable": "body",
+            "size_percent": 0.04,
+            "x_percent": 0.25,
+            "y_percent": 0.32,
+            "width_percent": 0.7,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "headline_1",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.08,
+            "x_percent": 0.25,
+            "y_percent": 0.48,
+            "width_percent": 0.3,
+            "alignment": "left",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "body",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.15,
+            "x_percent": 0.25,
+            "y_percent": 0.59,
+            "width_percent": 0.3,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body_1",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.04,
+            "x_percent": 0.5,
+            "y_percent": 0.4,
+            "width_percent": 0.2,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "headline_2",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.7,
+            "width_percent": 0.4,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "headline_3",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.86,
+            "width_percent": 0.4,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "headline_4",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.05,
+            "x_percent": 0.5,
+            "y_percent": 0.95,
+            "width_percent": 0.4,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Learned"
+      ],
+      "tags": [
+        "learned",
+        "v3",
+        "asymmetric"
+      ]
+    }
+  ]
+}

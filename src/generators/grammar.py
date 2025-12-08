@@ -374,7 +374,6 @@ class GrammarEngine:
 if __name__ == '__main__':
     # Test the grammar engine
     import sys
-    sys.path.append('src')
     from generators.generator import DesignGenerator
     from generators.renderer import DesignRenderer
     from generators.extractor import FeatureExtractor

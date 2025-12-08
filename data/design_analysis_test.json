@@ -1,0 +1,896 @@
+[
+  {
+    "file_path": "src/scrapers/images/f02f45dba331af7e91dd1c2b542d1614.jpg",
+    "filename": "f02f45dba331af7e91dd1c2b542d1614.jpg",
+    "analysis": {
+      "layout_structure": {
+        "type": [
+          "centered"
+        ],
+        "description": "The design is primarily centered with text elements stacked vertically above the cartoon image. The Canva logo is bottom-right.",
+        "margin_usage": "spacious"
+      },
+      "visual_hierarchy_path": [
+        "Headline",
+        "Canva Templates",
+        "Illustration",
+        "Canva logo",
+        "thehustlingmum.com"
+      ],
+      "background": {
+        "type": [
+          "solid"
+        ],
+        "color_hex": "#FFFFFF",
+        "overlay": {
+          "present": false
+        }
+      },
+      "typography_detailed": [
+        {
+          "role": "headline",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.07
+          },
+          "box_dimensions": {
+            "width": 0.8,
+            "height": 0.08
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "regular",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "dark",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "headline",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.18
+          },
+          "box_dimensions": {
+            "width": 0.8,
+            "height": 0.1
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "bold",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "accent",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "headline",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.28
+          },
+          "box_dimensions": {
+            "width": 0.8,
+            "height": 0.1
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "bold",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "accent",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "body",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.95
+          },
+          "box_dimensions": {
+            "width": 0.8,
+            "height": 0.05
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "regular",
+            "case": "lowercase",
+            "letter_spacing": "normal",
+            "color_category": "dark",
+            "contrast_ratio": "high"
+          }
+        }
+      ],
+      "images_and_assets": [
+        {
+          "type": "photo_main",
+          "role": "hero",
+          "position": {
+            "x": 0.5,
+            "y": 0.55
+          },
+          "size": {
+            "width": 0.7,
+            "height": 0.5
+          },
+          "styling": {
+            "opacity": 1.0,
+            "corner_radius": "none",
+            "shadow": false,
+            "border": false,
+            "mask_shape": "none"
+          }
+        }
+      ],
+      "icons_and_ui": [
+        {
+          "type": "button",
+          "purpose": "decoration",
+          "position": {
+            "x": 0.85,
+            "y": 0.82
+          },
+          "consistency": "no"
+        }
+      ],
+      "logo_analysis": {
+        "present": true,
+        "position_category": "bottom_right",
+        "position_exact": {
+          "x": 0.8,
+          "y": 0.8
+        },
+        "size_category": "prominent",
+        "integration": "standalone"
+      }
+    },
+    "timestamp": 1765025964.64392
+  },
+  {
+    "file_path": "src/scrapers/images/5deefcac4a436616a249ed3568dc668a.jpg",
+    "filename": "5deefcac4a436616a249ed3568dc668a.jpg",
+    "analysis": {
+      "layout_structure": {
+        "type": [
+          "asymmetric",
+          "pattern"
+        ],
+        "description": "An asymmetrical layout featuring a repeating pattern of hand-drawn daisies against a solid background.",
+        "margin_usage": "spacious"
+      },
+      "visual_hierarchy_path": [
+        "Daisies",
+        "Background",
+        "Signature"
+      ],
+      "background": {
+        "type": [
+          "solid"
+        ],
+        "color_hex": "#77a9d3",
+        "overlay": {
+          "present": false,
+          "type": [],
+          "opacity_estimate": 0.0
+        }
+      },
+      "typography_detailed": [
+        {
+          "role": "signature",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.89,
+            "y": 0.95
+          },
+          "box_dimensions": {
+            "width": 0.1,
+            "height": 0.05
+          },
+          "alignment_inner": "center",
+          "alignment_page": "bottom_right",
+          "style": {
+            "weight": "regular",
+            "case": "sentence_case",
+            "letter_spacing": "normal",
+            "color_category": "dark",
+            "contrast_ratio": "medium"
+          }
+        }
+      ],
+      "images_and_assets": [
+        {
+          "type": [
+            "photo_main"
+          ],
+          "role": [
+            "hero"
+          ],
+          "position": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "size": {
+            "width": 1.0,
+            "height": 1.0
+          },
+          "styling": {
+            "opacity": 1.0,
+            "corner_radius": "none",
+            "shadow": false,
+            "border": false,
+            "mask_shape": "none"
+          }
+        }
+      ],
+      "icons_and_ui": [],
+      "logo_analysis": {
+        "present": false,
+        "position_category": [],
+        "position_exact": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "size_category": [],
+        "integration": []
+      }
+    },
+    "timestamp": 1765025975.097088
+  },
+  {
+    "file_path": "src/scrapers/images/efbcc2c185a9fd733922a7dbf8f5c4ac.jpg",
+    "filename": "efbcc2c185a9fd733922a7dbf8f5c4ac.jpg",
+    "analysis": {
+      "layout_structure": {
+        "type": [
+          "asymmetric",
+          "frame"
+        ],
+        "description": "Asymmetrical layout with a black background and rounded pink elements framing the right side. Content is primarily left-aligned with the images on the right.",
+        "margin_usage": "spacious"
+      },
+      "visual_hierarchy_path": [
+        "Headline (Cassandra's Hair Salon)",
+        "Our Services",
+        "Book Your Appointment!",
+        "Images",
+        "Our Hours",
+        "Address/Contact Info"
+      ],
+      "background": {
+        "type": [
+          "solid"
+        ],
+        "color_hex": "#000000",
+        "overlay": {
+          "present": false,
+          "type": [],
+          "opacity_estimate": 0.0
+        }
+      },
+      "typography_detailed": [
+        {
+          "role": "headline",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.48,
+            "y": 0.1
+          },
+          "box_dimensions": {
+            "width": 0.5,
+            "height": 0.08
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "regular",
+            "case": "title_case",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "headline",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.25,
+            "y": 0.25
+          },
+          "box_dimensions": {
+            "width": 0.2,
+            "height": 0.05
+          },
+          "alignment_inner": "left",
+          "alignment_page": "left_margin",
+          "style": {
+            "weight": "bold",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "body",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.25,
+            "y": 0.49
+          },
+          "box_dimensions": {
+            "width": 0.2,
+            "height": 0.3
+          },
+          "alignment_inner": "left",
+          "alignment_page": "left_margin",
+          "style": {
+            "weight": "regular",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "cta",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.25,
+            "y": 0.8
+          },
+          "box_dimensions": {
+            "width": 0.3,
+            "height": 0.08
+          },
+          "alignment_inner": "left",
+          "alignment_page": "left_margin",
+          "style": {
+            "weight": "bold",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "headline",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.75,
+            "y": 0.77
+          },
+          "box_dimensions": {
+            "width": 0.2,
+            "height": 0.05
+          },
+          "alignment_inner": "left",
+          "alignment_page": "right_margin",
+          "style": {
+            "weight": "regular",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "body",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.75,
+            "y": 0.87
+          },
+          "box_dimensions": {
+            "width": 0.25,
+            "height": 0.15
+          },
+          "alignment_inner": "left",
+          "alignment_page": "right_margin",
+          "style": {
+            "weight": "regular",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "body",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.98
+          },
+          "box_dimensions": {
+            "width": 0.5,
+            "height": 0.04
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "regular",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        }
+      ],
+      "images_and_assets": [
+        {
+          "type": "photo_main",
+          "role": "support",
+          "position": {
+            "x": 0.75,
+            "y": 0.3
+          },
+          "size": {
+            "width": 0.2,
+            "height": 0.2
+          },
+          "styling": {
+            "opacity": 1.0,
+            "corner_radius": "full_round",
+            "shadow": false,
+            "border": true,
+            "mask_shape": "circle"
+          }
+        },
+        {
+          "type": "photo_main",
+          "role": "support",
+          "position": {
+            "x": 0.75,
+            "y": 0.53
+          },
+          "size": {
+            "width": 0.2,
+            "height": 0.2
+          },
+          "styling": {
+            "opacity": 1.0,
+            "corner_radius": "full_round",
+            "shadow": false,
+            "border": true,
+            "mask_shape": "circle"
+          }
+        },
+        {
+          "type": "photo_main",
+          "role": "support",
+          "position": {
+            "x": 0.5,
+            "y": 0.76
+          },
+          "size": {
+            "width": 0.2,
+            "height": 0.2
+          },
+          "styling": {
+            "opacity": 1.0,
+            "corner_radius": "full_round",
+            "shadow": false,
+            "border": true,
+            "mask_shape": "circle"
+          }
+        }
+      ],
+      "icons_and_ui": [
+        {
+          "type": "icon_outline",
+          "purpose": "decoration",
+          "position": {
+            "x": 0.05,
+            "y": 0.1
+          },
+          "consistency": "part_of_a_set"
+        },
+        {
+          "type": "icon_outline",
+          "purpose": "decoration",
+          "position": {
+            "x": 0.95,
+            "y": 0.1
+          },
+          "consistency": "part_of_a_set"
+        },
+        {
+          "type": "line",
+          "purpose": "decoration",
+          "position": {
+            "x": 0.13,
+            "y": 0.27
+          },
+          "consistency": "yes"
+        }
+      ],
+      "logo_analysis": {
+        "present": false,
+        "position_category": [],
+        "position_exact": {
+          "x": 0.0,
+          "y": 0.0
+        },
+        "size_category": [],
+        "integration": []
+      }
+    },
+    "timestamp": 1765025991.641549
+  },
+  {
+    "file_path": "src/scrapers/images/3493daf0af933906a2c086ac2b5b87fb.jpg",
+    "filename": "3493daf0af933906a2c086ac2b5b87fb.jpg",
+    "analysis": {
+      "layout_structure": {
+        "type": [
+          "asymmetric",
+          "split",
+          "diagonal"
+        ],
+        "description": "The layout is diagonally split with food images at the top and bottom and text in the center. The split is made to look like a torn paper.",
+        "margin_usage": "uneven"
+      },
+      "visual_hierarchy_path": [
+        "Now Open",
+        "Product Images",
+        "Debbie's Dishes Logo",
+        "FUTO | 08145584665",
+        "QR Code"
+      ],
+      "background": {
+        "type": [
+          "texture"
+        ],
+        "color_hex": null,
+        "overlay": {
+          "present": false,
+          "type": [],
+          "opacity_estimate": 0.0
+        }
+      },
+      "typography_detailed": [
+        {
+          "role": "headline",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.45
+          },
+          "box_dimensions": {
+            "width": 0.8,
+            "height": 0.2
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "bold",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "dark",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "body",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.7
+          },
+          "box_dimensions": {
+            "width": 0.8,
+            "height": 0.05
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "regular",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "dark",
+            "contrast_ratio": "high"
+          }
+        }
+      ],
+      "images_and_assets": [
+        {
+          "type": "photo_main",
+          "role": "hero",
+          "position": {
+            "x": 0.5,
+            "y": 0.2
+          },
+          "size": {
+            "width": 1.0,
+            "height": 0.3
+          },
+          "styling": {
+            "opacity": 1.0,
+            "corner_radius": "none",
+            "shadow": false,
+            "border": false,
+            "mask_shape": "none"
+          }
+        },
+        {
+          "type": "photo_main",
+          "role": "hero",
+          "position": {
+            "x": 0.5,
+            "y": 0.8
+          },
+          "size": {
+            "width": 1.0,
+            "height": 0.3
+          },
+          "styling": {
+            "opacity": 1.0,
+            "corner_radius": "none",
+            "shadow": false,
+            "border": false,
+            "mask_shape": "none"
+          }
+        }
+      ],
+      "icons_and_ui": [
+        {
+          "type": "icon_solid",
+          "purpose": "decoration",
+          "position": {
+            "x": 0.75,
+            "y": 0.48
+          },
+          "consistency": "no"
+        },
+        {
+          "type": "container",
+          "purpose": "CTA_container",
+          "position": {
+            "x": 0.8,
+            "y": 0.52
+          },
+          "consistency": "no"
+        }
+      ],
+      "logo_analysis": {
+        "present": true,
+        "position_category": "top_center",
+        "position_exact": {
+          "x": 0.5,
+          "y": 0.15
+        },
+        "size_category": "discreet",
+        "integration": "standalone"
+      }
+    },
+    "timestamp": 1765026005.20963
+  },
+  {
+    "file_path": "src/scrapers/images/8c8d4fad49767e2d0aef5f74de148413.jpg",
+    "filename": "8c8d4fad49767e2d0aef5f74de148413.jpg",
+    "analysis": {
+      "layout_structure": {
+        "type": [
+          "centered",
+          "asymmetric",
+          "grid",
+          "bottom_anchor",
+          "top_anchor"
+        ],
+        "description": "Centered main content with a grid arrangement of speaker photos. Bottom section anchored for event details and logos. Top section anchored for event name, slogan and logo.",
+        "margin_usage": "spacious"
+      },
+      "visual_hierarchy_path": [
+        "Limitless Headline",
+        "Speaker Photos",
+        "Elevate Your Network, Brand & Influence",
+        "Event Date and Time",
+        "Sponsor Logos"
+      ],
+      "background": {
+        "type": [
+          "gradient"
+        ],
+        "color_hex": null,
+        "overlay": {
+          "present": true,
+          "type": [
+            "gradient_fade"
+          ],
+          "opacity_estimate": 0.2
+        }
+      },
+      "typography_detailed": [
+        {
+          "role": "headline",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.15
+          },
+          "box_dimensions": {
+            "width": 0.7,
+            "height": 0.1
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "bold",
+            "case": "title_case",
+            "letter_spacing": "normal",
+            "color_category": "brand",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "subheading",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.25
+          },
+          "box_dimensions": {
+            "width": 0.6,
+            "height": 0.05
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "regular",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "body",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.19,
+            "y": 0.94
+          },
+          "box_dimensions": {
+            "width": 0.3,
+            "height": 0.08
+          },
+          "alignment_inner": "left",
+          "alignment_page": "left_margin",
+          "style": {
+            "weight": "regular",
+            "case": "title_case",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "body",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.5,
+            "y": 0.94
+          },
+          "box_dimensions": {
+            "width": 0.4,
+            "height": 0.08
+          },
+          "alignment_inner": "left",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "regular",
+            "case": "title_case",
+            "letter_spacing": "normal",
+            "color_category": "light",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "caption",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.13,
+            "y": 0.48
+          },
+          "box_dimensions": {
+            "width": 0.18,
+            "height": 0.08
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "regular",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "dark",
+            "contrast_ratio": "high"
+          }
+        },
+        {
+          "role": "caption",
+          "content_type": "static_text",
+          "position_exact": {
+            "x": 0.87,
+            "y": 0.78
+          },
+          "box_dimensions": {
+            "width": 0.18,
+            "height": 0.08
+          },
+          "alignment_inner": "center",
+          "alignment_page": "center_axis",
+          "style": {
+            "weight": "regular",
+            "case": "uppercase",
+            "letter_spacing": "normal",
+            "color_category": "dark",
+            "contrast_ratio": "high"
+          }
+        }
+      ],
+      "images_and_assets": [
+        {
+          "type": "photo_main",
+          "role": "hero",
+          "position": {
+            "x": 0.13,
+            "y": 0.4
+          },
+          "size": {
+            "width": 0.18,
+            "height": 0.2
+          },
+          "styling": {
+            "opacity": 1.0,
+            "corner_radius": "none",
+            "shadow": false,
+            "border": false,
+            "mask_shape": "rect"
+          }
+        },
+        {
+          "type": "photo_main",
+          "role": "hero",
+          "position": {
+            "x": 0.87,
+            "y": 0.7
+          },
+          "size": {
+            "width": 0.18,
+            "height": 0.2
+          },
+          "styling": {
+            "opacity": 1.0,
+            "corner_radius": "none",
+            "shadow": false,
+            "border": false,
+            "mask_shape": "rect"
+          }
+        }
+      ],
+      "icons_and_ui": [],
+      "logo_analysis": {
+        "present": true,
+        "position_category": "top_left",
+        "position_exact": {
+          "x": 0.05,
+          "y": 0.05
+        },
+        "size_category": "discreet",
+        "integration": "standalone"
+      }
+    },
+    "timestamp": 1765026018.057108
+  }
+]

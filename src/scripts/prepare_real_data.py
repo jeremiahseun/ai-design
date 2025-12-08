@@ -9,7 +9,8 @@ from tqdm import tqdm
 import torchvision.transforms as transforms
 
 # Add src to path
-sys.path.append('src')
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from core.schemas import DEVICE
 from models.encoder import UNetEncoder

@@ -1,0 +1,377 @@
+{
+  "category": "Learned Patterns",
+  "templates": [
+    {
+      "id": "learned_asymmetric_high",
+      "name": "Learned Asymmetric High",
+      "description": "Automated pattern extracted from 3 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.375,
+            "y_percent": 0.42500000000000004,
+            "width_percent": 0.55,
+            "height_percent": 0.6,
+            "layer_index": 0,
+            "color_variable": null,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline_0",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.125,
+            "x_percent": 0.375,
+            "y_percent": 0.275,
+            "width_percent": 0.45,
+            "alignment": "left",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "subheading_1",
+            "role": "subheading",
+            "text_content_variable": "subheading",
+            "font_variable": "body",
+            "size_percent": 0.035,
+            "x_percent": 0.625,
+            "y_percent": 0.265,
+            "width_percent": 0.25,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body_2",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.05,
+            "x_percent": 0.75,
+            "y_percent": 0.8,
+            "width_percent": 0.3,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "cta_3",
+            "role": "cta",
+            "text_content_variable": "cta",
+            "font_variable": "body",
+            "size_percent": 0.05,
+            "x_percent": 0.6,
+            "y_percent": 0.75,
+            "width_percent": 0.2,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "caption_4",
+            "role": "caption",
+            "text_content_variable": "caption",
+            "font_variable": "body",
+            "size_percent": 0.03,
+            "x_percent": 0.5,
+            "y_percent": 0.8049999999999999,
+            "width_percent": 0.2,
+            "alignment": "center",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Minimal"
+      ],
+      "tags": [
+        "learned",
+        "data-driven",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_centered_medium",
+      "name": "Learned Centered Medium",
+      "description": "Automated pattern extracted from 2 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.45,
+            "width_percent": 0.8500000000000001,
+            "height_percent": 0.8500000000000001,
+            "layer_index": 0,
+            "color_variable": null,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline_0",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.075,
+            "x_percent": 0.62,
+            "y_percent": 0.5589999999999999,
+            "width_percent": 0.375,
+            "alignment": "left",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "body_1",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.06,
+            "x_percent": 0.74,
+            "y_percent": 0.6100000000000001,
+            "width_percent": 0.15,
+            "alignment": "left",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Minimal"
+      ],
+      "tags": [
+        "learned",
+        "data-driven",
+        "centered"
+      ]
+    },
+    {
+      "id": "learned_centered_low",
+      "name": "Learned Centered Low",
+      "description": "Automated pattern extracted from 5 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.5,
+            "width_percent": 0.5,
+            "height_percent": 0.7,
+            "layer_index": 0,
+            "color_variable": null,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline_0",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.15000000000000002,
+            "x_percent": 0.5,
+            "y_percent": 0.24,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Minimal"
+      ],
+      "tags": [
+        "learned",
+        "data-driven",
+        "centered"
+      ]
+    },
+    {
+      "id": "learned_asymmetric_low",
+      "name": "Learned Asymmetric Low",
+      "description": "Automated pattern extracted from 2 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [],
+        "typography": [],
+        "background": {
+          "type": "gradient"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Minimal"
+      ],
+      "tags": [
+        "learned",
+        "data-driven",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_asymmetric_medium",
+      "name": "Learned Asymmetric Medium",
+      "description": "Automated pattern extracted from 4 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.45,
+            "width_percent": 0.6,
+            "height_percent": 0.7,
+            "layer_index": 0,
+            "color_variable": null,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline_0",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.1,
+            "x_percent": 0.45,
+            "y_percent": 0.435,
+            "width_percent": 0.7,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "subheading_1",
+            "role": "subheading",
+            "text_content_variable": "subheading",
+            "font_variable": "body",
+            "size_percent": 0.045,
+            "x_percent": 0.385,
+            "y_percent": 0.7849999999999999,
+            "width_percent": 0.30000000000000004,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "body_2",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.15,
+            "x_percent": 0.375,
+            "y_percent": 0.45,
+            "width_percent": 0.2,
+            "alignment": "left",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "caption_3",
+            "role": "caption",
+            "text_content_variable": "caption",
+            "font_variable": "body",
+            "size_percent": 0.03,
+            "x_percent": 0.5,
+            "y_percent": 0.95,
+            "width_percent": 0.4,
+            "alignment": "center",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Minimal"
+      ],
+      "tags": [
+        "learned",
+        "data-driven",
+        "asymmetric"
+      ]
+    },
+    {
+      "id": "learned_grid_low",
+      "name": "Learned Grid Low",
+      "description": "Automated pattern extracted from 2 designs.",
+      "layout": {
+        "canvas_ratio": 1.0,
+        "elements": [
+          {
+            "type": "image",
+            "x_percent": 0.5,
+            "y_percent": 0.5,
+            "width_percent": 0.9,
+            "height_percent": 0.75,
+            "layer_index": 0,
+            "color_variable": null,
+            "is_placeholder": true
+          }
+        ],
+        "typography": [
+          {
+            "id": "headline_0",
+            "role": "headline",
+            "text_content_variable": "headline",
+            "font_variable": "heading",
+            "size_percent": 0.2,
+            "x_percent": 0.5,
+            "y_percent": 0.15,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "xl"
+          },
+          {
+            "id": "body_1",
+            "role": "body",
+            "text_content_variable": "body",
+            "font_variable": "body",
+            "size_percent": 0.15,
+            "x_percent": 0.5,
+            "y_percent": 0.8,
+            "width_percent": 0.8,
+            "alignment": "center",
+            "font_size_variable": "md"
+          },
+          {
+            "id": "caption_2",
+            "role": "caption",
+            "text_content_variable": "caption",
+            "font_variable": "body",
+            "size_percent": 0.03,
+            "x_percent": 0.3,
+            "y_percent": 0.95,
+            "width_percent": 0.4,
+            "alignment": "left",
+            "font_size_variable": "md"
+          }
+        ],
+        "background": {
+          "type": "solid"
+        }
+      },
+      "recommended_styles": [
+        "Modern",
+        "Minimal"
+      ],
+      "tags": [
+        "learned",
+        "data-driven",
+        "grid"
+      ]
+    }
+  ]
+}

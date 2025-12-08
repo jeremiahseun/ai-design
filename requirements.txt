@@ -1,10 +1,9 @@
-# Core PyTorch for Apple Silicon (MPS)
+# Core ML & Data Science
 torch>=2.0.0
 torchvision>=0.15.0
 torchaudio>=2.0.0
-
-# Numerical Computing
 numpy>=1.24.0
+scipy>=1.11.0
 
 # Computer Vision & Image Processing
 opencv-python>=4.8.0
@@ -14,6 +13,15 @@ Pillow>=10.0.0
 matplotlib>=3.7.0
 tqdm>=4.65.0
 
-# Additional utilities for diffusion models
+# --- Optional: Stable Diffusion & AI Services ---
+# These are for the advanced pipelines and scrapers.
+diffusers>=0.24.0
+transformers>=4.36.0
+accelerate>=0.25.0
+peft>=0.7.0
 einops>=0.7.0
-scipy>=1.11.0
+requests>=2.31.0
+google-generativeai>=0.8.0
+
+# --- Optional: Environment Management ---
+python-dotenv>=0.21.0

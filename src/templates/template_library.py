@@ -25,14 +25,13 @@ class TemplateLibrary:
         self._load_presets()
 
     def _load_presets(self):
-        """Load all JSON files from the presets directory."""
+        """Load all JSON files from the presets directory recursively."""
         if not self.presets_dir.exists():
             print(f"⚠️ Presets directory not found: {self.presets_dir}")
             return
 
-        for filename in os.listdir(self.presets_dir):
-            if filename.endswith(".json"):
-                self._load_file(self.presets_dir / filename)
+        for path in self.presets_dir.rglob("*.json"):
+            self._load_file(path)
 
     def _load_file(self, path: Path):
         """Parse a single JSON preset file."""

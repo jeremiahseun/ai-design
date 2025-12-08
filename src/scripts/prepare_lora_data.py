@@ -18,7 +18,8 @@ from pathlib import Path
 from tqdm import tqdm
 
 # Add src to path to import SDDecoder logic
-sys.path.append('src')
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from models.sd_decoder import SDDecoder
 
 def prepare_lora_dataset(source_dir: str, output_dir: str):
