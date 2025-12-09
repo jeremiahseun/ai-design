@@ -9,8 +9,11 @@ import base64
 import time
 from pathlib import Path
 from typing import Dict, List, Optional
+import google.generativeai as genai
+import google.api_core.exceptions
+import random
 from PIL import Image
-import anthropic
+
 
 try:
     from .config import Config
@@ -33,14 +36,14 @@ class AILabeler:
             config: Config object with Claude API key
         """
         self.config = config
-        self.api_key = config.get('claude', 'api_key')
-        self.model = config.get('claude', 'model')
-        self.max_tokens = config.get('claude', 'max_tokens')
+        self.api_key = config.get('gemini', 'api_key')
+        self.model_name = config.get('gemini', 'model')
 
         if not self.api_key:
-            raise ValueError("Claude API key not configured. Check config.json")
+            raise ValueError("Gemini API key not configured. Set GOOGLE_API_KEY env var or in config.json.")
 
-        self.client = anthropic.Anthropic(api_key=self.api_key)
+        genai.configure(api_key=self.api_key)
+        self.model = genai.GenerativeModel(self.model_name)
         self.metadata_labeler = MetadataLabeler()  # Fallback
 
         # Statistics
@@ -66,73 +69,55 @@ class AILabeler:
         """
         metadata = metadata or {}
 
-        try:
-            # Load and encode image
-            image = Image.open(image_path).convert('RGB')
+        max_retries = 5
+        base_delay = 5  # seconds
+        jitter_factor = 0.5
 
-            # Resize if too large (Claude has size limits)
-            if max(image.size) > 1568:
-                ratio = 1568 / max(image.size)
-                new_size = tuple(int(dim * ratio) for dim in image.size)
-                image = image.resize(new_size, Image.Resampling.LANCZOS)
+        for attempt in range(max_retries):
+            try:
+                # Load and encode image
+                image = Image.open(image_path).convert('RGB')
 
-            # Convert to base64
-            from io import BytesIO
-            buffer = BytesIO()
-            image.save(buffer, format='PNG')
-            image_data = base64.b64encode(buffer.getvalue()).decode()
+                # Build prompt
+                prompt_text = self._build_prompt(metadata)
 
-            # Build prompt
-            prompt = self._build_prompt(metadata)
+                # Call Gemini API
+                response = self.model.generate_content([prompt_text, image])
 
-            # Call Claude API
-            response = self.client.messages.create(
-                model=self.model,
-                max_tokens=self.max_tokens,
-                messages=[{
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": "image/png",
-                                "data": image_data
-                            }
-                        },
-                        {
-                            "type": "text",
-                            "text": prompt
-                        }
-                    ]
-                }]
-            )
+                # Parse response
+                labels = self._parse_response(response.text)
 
-            # Parse response
-            labels = self._parse_response(response.content[0].text)
+                # Validate
+                if not validate_label(labels['v_Goal'], labels['v_Format'], labels['v_Tone']):
+                    raise ValueError(f"Invalid labels from AI: {labels}")
 
-            # Validate
-            if not validate_label(labels['v_Goal'], labels['v_Format'], labels['v_Tone']):
-                raise ValueError(f"Invalid labels from AI: {labels}")
+                # Add metadata
+                labels['confidence'] = 0.9  # High confidence for AI
+                labels['method'] = 'gemini_vision' # Updated method name
+                labels['source'] = metadata.get('source', 'unknown')
+                labels['original_url'] = metadata.get('url', '')
 
-            # Add metadata
-            labels['confidence'] = 0.9  # High confidence for AI
-            labels['method'] = 'claude_vision'
-            labels['source'] = metadata.get('source', 'unknown')
-            labels['original_url'] = metadata.get('url', '')
+                self.total_requests += 1
+                self.successful_requests += 1
 
-            self.total_requests += 1
-            self.successful_requests += 1
+                return labels
 
-            return labels
+            except (google.api_core.exceptions.ResourceExhausted, google.api_core.exceptions.GoogleAPIError) as e:
+                if attempt < max_retries - 1:
+                    delay = base_delay * (2 ** attempt) + random.uniform(0, base_delay * jitter_factor)
+                    print(f"⚠️  Gemini API rate limit hit or transient error (Attempt {attempt+1}/{max_retries}). Retrying in {delay:.2f}s...")
+                    time.sleep(delay)
+                else:
+                    print(f"❌ Gemini API failed after {max_retries} attempts: {e}")
+                    self.total_requests += 1
+                    self.failed_requests += 1
+                    # Fall through to fallback logic
 
-        except Exception as e:
-            print(f"AI labeling failed: {e}")
-            print("Falling back to metadata labeling...")
-
-            self.total_requests += 1
-            self.failed_requests += 1
-            self.fallback_requests += 1
+            except Exception as e:
+                print(f"AI labeling failed: {e}")
+                self.total_requests += 1
+                self.failed_requests += 1
+                # Fall through to fallback logic
 
             # Fallback to metadata labeling
             image = Image.open(image_path).convert('RGB')
@@ -291,11 +276,11 @@ Example: promotion,poster,0.8
 
     def estimate_cost(self, num_images: int) -> float:
         """
-        Estimate cost for labeling N images.
+        Estimate cost for labeling N images using Gemini Flash.
 
-        Claude Vision costs approximately $0.003 per image.
+        Gemini 1.5 Flash costs approximately $0.00025 per image (dominated by image input).
         """
-        cost_per_image = 0.003
+        cost_per_image = 0.00025
         return num_images * cost_per_image
 
 

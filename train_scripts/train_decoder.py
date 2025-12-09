@@ -249,15 +249,18 @@ def train(args):
     print(f"\nLoading dataset from: {args.data_dir}")
 
     if args.use_real_data:
-        print("  Using REAL DATA dataset loader")
+        print(f"  Using REAL DATA dataset loader from: {args.metadata_path}")
+        # Get absolute path for data_root
+        data_root_path = Path(args.data_root).resolve()
         train_loader, val_loader = create_real_dataloaders(
-            data_dir=args.data_dir,
+            metadata_path=args.metadata_path,
+            data_root=str(data_root_path),
             batch_size=args.batch_size,
             train_ratio=args.train_ratio,
             num_workers=args.num_workers
         )
     else:
-        print("  Using SYNTHETIC DATA dataset loader")
+        print(f"  Using SYNTHETIC DATA dataset loader from: {args.data_dir}")
         train_loader, val_loader = create_dataloaders(
             data_dir=args.data_dir,
             batch_size=args.batch_size,
@@ -406,7 +409,11 @@ def main():
 
     # Data
     parser.add_argument('--data_dir', type=str, default='data/synthetic_dataset',
-                       help='Path to dataset')
+                       help='Path to synthetic dataset directory')
+    parser.add_argument('--metadata_path', type=str, default='data/real_designs/final_dataset/metadata.json',
+                       help='Path to real data metadata.json file')
+    parser.add_argument('--data_root', type=str, default='.',
+                       help='Root directory for resolving image paths in real dataset')
     parser.add_argument('--train_ratio', type=float, default=0.9,
                        help='Train/val split ratio')
 

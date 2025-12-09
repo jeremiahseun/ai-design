@@ -34,10 +34,9 @@ class Config:
                 'access_token': None,
                 'rate_limit_delay': 1.0,  # seconds between requests
             },
-            'claude': {
+            'gemini': {
                 'api_key': None,
-                'model': 'claude-3-5-sonnet-20241022',
-                'max_tokens': 200,
+                'model': 'gemini-2.5-flash-lite',
             },
             'pinterest': {
                 'headless': True,  # Run browser in headless mode
@@ -74,8 +73,8 @@ class Config:
         # Override with environment variables if present
         if os.getenv('FIGMA_ACCESS_TOKEN'):
             config['figma']['access_token'] = os.getenv('FIGMA_ACCESS_TOKEN')
-        if os.getenv('CLAUDE_API_KEY'):
-            config['claude']['api_key'] = os.getenv('CLAUDE_API_KEY')
+        if os.getenv('GOOGLE_API_KEY'):
+            config['gemini']['api_key'] = os.getenv('GOOGLE_API_KEY')
 
         return config
 
@@ -109,9 +108,9 @@ class Config:
         if not self.get('figma', 'access_token'):
             errors.append("Figma access token not configured")
 
-        # Check Claude API key
-        if not self.get('claude', 'api_key'):
-            errors.append("Claude API key not configured")
+        # Check Gemini API key
+        if not self.get('gemini', 'api_key'):
+            errors.append("Gemini API key not configured")
 
         return len(errors) == 0, errors
 
@@ -130,10 +129,9 @@ class Config:
                 "access_token": "YOUR_FIGMA_ACCESS_TOKEN_HERE",
                 "rate_limit_delay": 1.0
             },
-            "claude": {
-                "api_key": "YOUR_CLAUDE_API_KEY_HERE",
-                "model": "claude-3-5-sonnet-20241022",
-                "max_tokens": 200
+            "gemini": {
+                "api_key": "GEMINI_API_KEY",
+                "model": "gemini-2.5-flash-lite"
             },
             "pinterest": {
                 "headless": True,
