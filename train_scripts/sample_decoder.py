@@ -29,9 +29,9 @@ from tqdm import tqdm
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from core.schemas import DEVICE
-from models.decoder import ConditionalUNet
-from models.diffusion_utils import DiffusionSchedule
+from src.core.schemas import DEVICE
+from src.models.decoder import ConditionalUNet
+from src.models.diffusion_utils import DiffusionSchedule
 
 
 def load_model(checkpoint_path, device):

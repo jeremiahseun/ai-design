@@ -3,10 +3,9 @@
     "access_token": "YOUR_FIGMA_ACCESS_TOKEN_HERE",
     "rate_limit_delay": 1.0
   },
-  "claude": {
-    "api_key": "YOUR_CLAUDE_API_KEY_HERE",
-    "model": "claude-3-5-sonnet-20241022",
-    "max_tokens": 200
+  "gemini": {
+    "api_key": "YOUR_GEMINI_API_KEY_HERE",
+    "model": "gemini-1.5-flash"
   },
   "scraping": {
     "max_images": 5000,

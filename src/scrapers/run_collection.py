@@ -51,8 +51,9 @@ def main():
 
     # Check for input files
     print("\nStep 3: Checking for input files...")
-    figma_file = Path("figma_urls.txt")
-    pinterest_file = Path("pinterest_urls.txt")
+    base_path = Path(__file__).parent
+    figma_file = base_path / "figma_urls.txt"
+    pinterest_file = base_path / "pinterest_urls.txt"
 
     has_figma = figma_file.exists()
     has_pinterest = pinterest_file.exists()

@@ -1,6 +1,7 @@
 """
 Training script for Conditional DDPM Decoder (Module 7)
-Trains the model to generate design images from semantic metadata
+Trains the model to generate design images from semantic metadata.
+With resetting optimizer LR to initial value.
 
 Usage:
     python train_scripts/train_decoder.py --epochs 30 --batch_size 16
@@ -13,21 +14,25 @@ import sys
 import argparse
 import torch
 import torch.optim as optim
-from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim.lr_scheduler import CosineAnnealingLR
 from pathlib import Path
 from tqdm import tqdm
 import json
 import time
 
 # Add src to path
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+if os.path.exists('/kaggle/input'):
+    # Running on Kaggle, add the specific path to the project code
+    sys.path.insert(0, '/kaggle/input/ai-design-code')
+else:
+    # Running locally, add the parent directory
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from core.schemas import DEVICE
-from models.decoder import ConditionalUNet
-from models.diffusion_utils import DiffusionSchedule
-from utils.dataset import create_dataloaders
-from utils.real_dataset import create_real_dataloaders
+from src.core.schemas import DEVICE
+from src.models.decoder import ConditionalUNet
+from src.models.diffusion_utils import DiffusionSchedule
+from src.utils.dataset import create_dataloaders
+from src.utils.real_dataset import create_real_dataloaders
 
 def train_epoch(model, dataloader, diffusion, optimizer, device, epoch, gradient_accumulation_steps=1, scaler=None):
     """
@@ -59,7 +64,7 @@ def train_epoch(model, dataloader, diffusion, optimizer, device, epoch, gradient
 
         # Forward pass with mixed precision
         if scaler is not None:
-            with torch.cuda.amp.autocast():
+            with torch.amp.autocast('cuda'):
                 predicted_noise = model(x_t, t, v_meta)
                 loss = torch.nn.functional.mse_loss(predicted_noise, noise)
                 loss = loss / gradient_accumulation_steps
@@ -154,10 +159,10 @@ def validate_epoch(model, dataloader, diffusion, device, epoch):
     return avg_loss
 
 
-def save_checkpoint(model, optimizer, scheduler, diffusion, epoch, val_loss, checkpoint_dir, train_loss=None, is_best=False):
+def save_checkpoint(model, optimizer, scheduler, diffusion, epoch, val_loss, checkpoint_dir, train_loss=None, is_best=False, save_interval=1):
     """
     Save model checkpoint
-    Strategy: Keep best model + last epoch only (auto-delete previous epoch)
+    Strategy: Keep best model + checkpoints at specified intervals
     """
     checkpoint_dir = Path(checkpoint_dir)
     checkpoint_dir.mkdir(parents=True, exist_ok=True)
@@ -172,17 +177,18 @@ def save_checkpoint(model, optimizer, scheduler, diffusion, epoch, val_loss, che
         'timesteps': diffusion.timesteps
     }
 
-    # Delete previous epoch checkpoint (epoch - 1)
-    if epoch > 0:
-        prev_checkpoint = checkpoint_dir / f'decoder_epoch_{epoch-1:03d}.pth'
-        if prev_checkpoint.exists():
-            prev_checkpoint.unlink()
-            print(f"  🗑️  Deleted previous checkpoint: epoch {epoch-1}")
+    # Save checkpoint only at specified interval
+    if epoch % save_interval == 0:
+        # Delete previous epoch checkpoint ONLY if interval is 1 (to save space)
+        if save_interval == 1 and epoch > 0:
+            prev_checkpoint = checkpoint_dir / f'decoder_epoch_{epoch-1:03d}.pth'
+            if prev_checkpoint.exists():
+                prev_checkpoint.unlink()
+                # print(f"  🗑️  Deleted previous checkpoint: epoch {epoch-1}")
 
-    # Save current epoch checkpoint
-    checkpoint_path = checkpoint_dir / f'decoder_epoch_{epoch:03d}.pth'
-    torch.save(checkpoint, checkpoint_path)
-    print(f"  💾 Saved epoch checkpoint: epoch {epoch}")
+        checkpoint_path = checkpoint_dir / f'decoder_epoch_{epoch:03d}.pth'
+        torch.save(checkpoint, checkpoint_path)
+        print(f"  💾 Saved epoch checkpoint: epoch {epoch}")
 
     # Save best checkpoint
     if is_best:
@@ -190,16 +196,14 @@ def save_checkpoint(model, optimizer, scheduler, diffusion, epoch, val_loss, che
         torch.save(checkpoint, best_path)
         print(f"  💾 Saved best model (val_loss: {val_loss:.4f})")
 
-    return checkpoint_path
 
-
-def load_checkpoint(model, checkpoint_path, optimizer=None, scheduler=None):
+def load_checkpoint(model, checkpoint_path, optimizer=None, scheduler=None, device='cpu'):
     """
     Load model checkpoint
     Returns: (epoch, val_loss)
     """
     print(f"Loading checkpoint from {checkpoint_path}")
-    checkpoint = torch.load(checkpoint_path, map_location=DEVICE)
+    checkpoint = torch.load(checkpoint_path, map_location=device)
 
     model.load_state_dict(checkpoint['model_state_dict'])
 
@@ -227,9 +231,12 @@ def train(args):
     print("=" * 80)
 
     # Set device
-    device = DEVICE
+    device = torch.device(args.device)
     print(f"\nDevice: {device}")
-    print(f"MPS available: {torch.backends.mps.is_available()}")
+    if device.type == 'cuda':
+        print(f"  CUDA available: {torch.cuda.is_available()}")
+    elif device.type == 'mps':
+        print(f"  MPS available: {torch.backends.mps.is_available()}")
 
     # Enable MPS fallback if needed
     if device.type == 'mps':
@@ -307,8 +314,8 @@ def train(args):
 
     # Create optimizer and scheduler
     optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
-    scheduler = ReduceLROnPlateau(
-        optimizer, mode='min', factor=0.5, patience=5
+    scheduler = CosineAnnealingLR(
+        optimizer, T_max=args.epochs, eta_min=1e-7 # End LR slightly above zero
     )
 
     # Mixed precision training
@@ -325,9 +332,29 @@ def train(args):
     best_val_loss = float('inf')
 
     if args.resume:
-        start_epoch, resumed_val_loss = load_checkpoint(model, args.resume, optimizer, scheduler)
-        best_val_loss = resumed_val_loss  # Restore the best val loss
-        start_epoch += 1  # Start from next epoch
+        print("  Resuming training...")
+        scheduler_to_load = scheduler if not args.reset_scheduler else None
+        optimizer_to_load = optimizer if not args.reset_optimizer else None
+        if args.reset_scheduler:
+            print("  Scheduler state will be reset.")
+        if args.reset_optimizer:
+            print("  Optimizer state will be reset.")
+
+        completed_epoch, resumed_val_loss = load_checkpoint(model, args.resume, optimizer_to_load, scheduler_to_load, device=device)
+        best_val_loss = resumed_val_loss
+        start_epoch = completed_epoch + 1
+
+        # If we reset the scheduler, we must manually sync its internal epoch counter
+        # to the epoch we are resuming from, otherwise it will start from epoch 0.
+        if args.reset_scheduler:
+            print(f"  Manually setting new scheduler's epoch to {completed_epoch}")
+            scheduler.last_epoch = completed_epoch
+
+            # Also, forcefully reset the optimizer's learning rate to the initial value,
+            # as the value from the checkpoint (which is 0) might be preserved.
+            print(f"  Forcefully resetting optimizer LR to initial value: {args.lr}")
+            for param_group in optimizer.param_groups:
+                param_group['lr'] = args.lr
 
     # Training loop
     print(f"\nStarting training for {args.epochs} epochs...")
@@ -356,7 +383,7 @@ def train(args):
         )
 
         # Update scheduler
-        scheduler.step(val_loss)
+        scheduler.step()
 
         # Save history
         training_history['train_loss'].append(train_loss)
@@ -456,6 +483,9 @@ def main():
                        help='Weight decay')
     parser.add_argument('--num_workers', type=int, default=0,
                        help='Number of data loading workers')
+    parser.add_argument('--device', type=str,
+                        default='cuda' if torch.cuda.is_available() else 'mps' if torch.backends.mps.is_available() else 'cpu',
+                        help='Device to use for training (cuda, mps, cpu)')
     parser.add_argument('--mixed_precision', action='store_true', default=True,
                        help='Use mixed precision training (AMP)')
     parser.add_argument('--use_gradient_checkpointing', action='store_true', default=True,
@@ -467,6 +497,10 @@ def main():
                        help='Directory to save checkpoints')
     parser.add_argument('--resume', type=str, default=None,
                        help='Path to checkpoint to resume from')
+    parser.add_argument('--reset-scheduler', action='store_true',
+                        help='Do not load scheduler state when resuming from a checkpoint.')
+    parser.add_argument('--reset-optimizer', action='store_true',
+                        help='Do not load optimizer state when resuming from a checkpoint.')
     parser.add_argument('--save_interval', type=int, default=5,
                        help='Save checkpoint every N epochs')
 

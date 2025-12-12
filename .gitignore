@@ -106,3 +106,4 @@ src/scrapers/images/
 
 
 .env
+/scraped_data/final_dataset/images

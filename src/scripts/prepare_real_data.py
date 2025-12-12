@@ -1,134 +1,106 @@
-import os
 import sys
-import json
-import torch
-import argparse
+import os
 from pathlib import Path
-from PIL import Image
-from tqdm import tqdm
-import torchvision.transforms as transforms
+import json
 
 # Add src to path
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from core.schemas import DEVICE
-from models.encoder import UNetEncoder
-from models.abstractor import Abstractor
+from scrapers.label_pipeline import LabelPipeline
+from scrapers.config import load_config
 
-def load_models(encoder_path, abstractor_path, device):
-    print(f"Loading models on {device}...")
+def prepare_from_local_images(images_dir: str, output_dir: str):
+    """
+    Runs the labeling and dataset preparation pipeline on a directory of existing images.
+    """
+    print("=" * 70)
+    print("Prepare Real Dataset from Local Images")
+    print("=" * 70)
+    print()
 
-    # Load Encoder
-    encoder = UNetEncoder(n_channels=3, n_color_classes=18, bilinear=False).to(device)
-    encoder_ckpt = torch.load(encoder_path, map_location=device)
-    encoder.load_state_dict(encoder_ckpt['model_state_dict'])
-    encoder.eval()
-    print("  Encoder loaded")
-
-    # Load Abstractor
-    abstractor = Abstractor(n_goal_classes=4, n_format_classes=3, pretrained=False).to(device)
-    abstractor_ckpt = torch.load(abstractor_path, map_location=device)
-    abstractor.load_state_dict(abstractor_ckpt['model_state_dict'])
-    abstractor.eval()
-    print("  Abstractor loaded")
-
-    return encoder, abstractor
-
-def process_images(input_dir, output_dir, encoder, abstractor, device):
-    input_path = Path(input_dir)
-    output_path = Path(output_dir)
-
-    images_dir = output_path / 'images'
-    meta_dir = output_path / 'metadata'
-
-    images_dir.mkdir(parents=True, exist_ok=True)
-    meta_dir.mkdir(parents=True, exist_ok=True)
-
-    # Image transform
-    transform = transforms.Compose([
-        transforms.Resize((256, 256)),
-        transforms.ToTensor(), # [0, 1]
-    ])
-
-    image_files = list(input_path.glob('*.jpg')) + list(input_path.glob('*.png')) + list(input_path.glob('*.jpeg'))
-    print(f"Found {len(image_files)} images in {input_dir}")
-
-    success_count = 0
-    error_count = 0
-
-    for i, img_file in enumerate(tqdm(image_files)):
-        try:
-            # Load and resize image
-            img = Image.open(img_file).convert('RGB')
-            img_tensor = transform(img).unsqueeze(0).to(device) # [1, 3, 256, 256]
-
-            # Auto-labeling pipeline
-            with torch.no_grad():
-                # 1. Encoder: RGB -> F_Tensor
-                f_tensor = encoder.predict(img_tensor) # [1, 4, 256, 256]
-
-                # 2. Abstractor: F_Tensor -> V_Meta
-                outputs = abstractor(f_tensor)
-
-                # Extract predictions
-                v_goal = torch.argmax(outputs['v_goal'], dim=1).item()
-                v_format = torch.argmax(outputs['v_format'], dim=1).item()
-                v_tone = outputs['v_tone'].item()
-
-                # Also get grammar scores for reference
-                v_grammar = outputs['v_grammar'][0].tolist()
-
-            # Save processed image
-            out_filename = f"{i:06d}"
-            img_save_path = images_dir / f"{out_filename}.png"
-            img.resize((256, 256)).save(img_save_path)
-
-            # Save metadata
-            meta_save_path = meta_dir / f"{out_filename}.json"
-            metadata = {
-                "filename": f"{out_filename}.png",
-                "original_file": img_file.name,
-                "v_meta": {
-                    "v_Goal": v_goal,
-                    "v_Format": v_format,
-                    "v_Tone": v_tone
-                },
-                "v_grammar": v_grammar # Optional, but good to have
-            }
-
-            with open(meta_save_path, 'w') as f:
-                json.dump(metadata, f, indent=2)
-
-            success_count += 1
-
-        except Exception as e:
-            # print(f"Error processing {img_file}: {e}")
-            error_count += 1
-
-    print(f"\nProcessing complete.")
-    print(f"Successfully processed: {success_count}")
-    print(f"Errors: {error_count}")
-    print(f"Data saved to: {output_dir}")
-
-def main():
-    parser = argparse.ArgumentParser(description='Prepare Real Data for Training')
-    parser.add_argument('--input_dir', type=str, required=True, help='Directory containing raw images')
-    parser.add_argument('--output_dir', type=str, default='data/real_designs', help='Output directory for dataset')
-    parser.add_argument('--encoder_ckpt', type=str, default='checkpoints/encoder_best.pth', help='Path to Encoder checkpoint')
-    parser.add_argument('--abstractor_ckpt', type=str, default='checkpoints/abstractor_best.pth', help='Path to Abstractor checkpoint')
-
-    args = parser.parse_args()
-
-    if not os.path.exists(args.encoder_ckpt) or not os.path.exists(args.abstractor_ckpt):
-        print("Error: Checkpoints not found. Please ensure 'checkpoints/encoder_best.pth' and 'checkpoints/abstractor_best.pth' exist.")
+    # Load config
+    config = load_config()
+    is_valid, errors = config.validate()
+    if not is_valid:
+        print("✗ Configuration errors:")
+        for error in errors:
+            print(f"  - {error}")
         return
 
-    device = DEVICE
+    images_path = Path(images_dir)
+    if not images_path.exists():
+        print(f"✗ Error: Images directory not found at '{images_dir}'")
+        return
 
-    encoder, abstractor = load_models(args.encoder_ckpt, args.abstractor_ckpt, device)
+    # 1. Find all images and create initial metadata
+    print(f"1. Searching for images in '{images_dir}'...")
+    image_extensions = ['.png', '.jpg', '.jpeg', '.webp']
+    image_paths = [p for p in images_path.rglob('*') if p.suffix.lower() in image_extensions]
+    
+    if not image_paths:
+        print("✗ No images found.")
+        return
+        
+    print(f"✓ Found {len(image_paths)} images.")
 
-    process_images(args.input_dir, args.output_dir, encoder, abstractor, device)
+    all_metadata = []
+    for i, img_path in enumerate(image_paths):
+        all_metadata.append({
+            'image_path': str(img_path),
+            'title': img_path.stem,
+            'source': 'local_import',
+            'url': img_path.resolve().as_uri()
+        })
+
+    # 2. Run the labeling and preparation pipeline
+    pipeline = LabelPipeline(config)
+    
+    labeled_dir = Path(output_dir) / "labeled"
+    final_dir = Path(output_dir) / "final_dataset"
+    
+    labeled_dir.mkdir(parents=True, exist_ok=True)
+    final_dir.mkdir(parents=True, exist_ok=True)
+
+    # Step 3 (from original pipeline): Label images
+    print("\n" + "=" * 70)
+    print("STEP 2: Labeling Images")
+    print("=" * 70)
+
+    labeled_metadata = pipeline._label_images(
+        all_metadata,
+        labeled_dir=labeled_dir,
+        use_ai=True
+    )
+    
+    labeled_manifest_path = labeled_dir / "manifest.json"
+    with open(labeled_manifest_path, 'w') as f:
+        json.dump(labeled_metadata, f, indent=2)
+    print(f"\n✓ Labeled metadata saved to: {labeled_manifest_path}")
+
+    # Step 4 (from original pipeline): Prepare final dataset
+    print("\n" + "=" * 70)
+    print("STEP 3: Preparing Final Dataset")
+    print("=" * 70)
+
+    final_metadata = pipeline._prepare_final_dataset(
+        labeled_metadata,
+        str(final_dir)
+    )
+
+    # Save final manifest
+    final_manifest_path = final_dir / "metadata.json"
+    with open(final_manifest_path, 'w') as f:
+        json.dump(final_metadata, f, indent=2)
+
+    print("\n" + "=" * 70)
+    print("✓ Pipeline Complete!")
+    print(f"Final dataset created at: {final_dir}")
+    print(f"Total images processed: {len(final_metadata)}")
+    print("=" * 70)
 
 if __name__ == '__main__':
-    main()
+    # Note: This script assumes it is run from the project root.
+    # The paths are relative to the root.
+    images_directory = 'src/scrapers/images'
+    output_directory = 'scraped_data'
+    prepare_from_local_images(images_directory, output_directory)

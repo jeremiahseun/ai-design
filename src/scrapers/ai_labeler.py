@@ -1,7 +1,7 @@
 """
-AI-based labeling using Claude Vision API.
+AI-based labeling using Gemini Vision API.
 
-High accuracy (~90-95%) but costs ~$0.003 per image.
+High accuracy (~90-95%) but costs ~$0.00025 per image.
 Falls back to metadata labeling if API fails.
 """
 
@@ -26,14 +26,14 @@ except ImportError:
 
 
 class AILabeler:
-    """Claude Vision-based labeler for high-accuracy classification."""
+    """Gemini Vision-based labeler for high-accuracy classification."""
 
     def __init__(self, config: Config):
         """
         Initialize AI labeler.
 
         Args:
-            config: Config object with Claude API key
+            config: Config object with Gemini API key
         """
         self.config = config
         self.api_key = config.get('gemini', 'api_key')
@@ -58,7 +58,7 @@ class AILabeler:
         metadata: Optional[Dict] = None
     ) -> Dict:
         """
-        Label a single image using Claude Vision.
+        Label a single image using Gemini Vision.
 
         Args:
             image_path: Path to image file
@@ -161,7 +161,7 @@ class AILabeler:
         results = []
         total = len(image_paths)
 
-        print(f"Labeling {total} images with Claude Vision...")
+        print(f"Labeling {total} images with Gemini Vision...")
 
         for i, (image_path, metadata) in enumerate(zip(image_paths, metadata_list), 1):
             # Label image
@@ -182,7 +182,7 @@ class AILabeler:
         return results
 
     def _build_prompt(self, metadata: Dict) -> str:
-        """Build prompt for Claude Vision."""
+        """Build prompt for Gemini Vision."""
         prompt = """Analyze this graphic design and classify it with the following labels:
 
 1. **Goal** (the purpose/intent of the design):
@@ -229,7 +229,7 @@ Example: promotion,poster,0.8
 
     def _parse_response(self, response_text: str) -> Dict:
         """
-        Parse Claude's response into label dict.
+        Parse Gemini's response into label dict.
 
         Expected format: "goal,format,tone"
         Example: "promotion,poster,0.8"

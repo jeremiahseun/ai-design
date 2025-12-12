@@ -46,6 +46,15 @@ except ImportError:
         validate_label
     )
 
+GOAL_MAP = {
+    "education": 0, "social": 1, "service": 2, "product": 3, "event": 4,
+    "entertainment": 5, "branding": 6, "information": 7, "other": 8, "default": 9
+}
+
+FORMAT_MAP = {
+    "social": 0, "poster": 1, "flyer": 2, "other": 3, "default": 3
+}
+
 
 class LabelPipeline:
     """Complete pipeline for scraping and labeling designs."""
@@ -199,7 +208,7 @@ class LabelPipeline:
             },
             'labeling_methods': {
                 'metadata': len([m for m in labeled_metadata if m.get('method') == 'metadata_heuristic']),
-                'ai': len([m for m in labeled_metadata if m.get('method') == 'claude_vision']),
+                'ai': len([m for m in labeled_metadata if m.get('method') == 'gemini_vision']),
                 'fallback': len([m for m in labeled_metadata if m.get('method') == 'metadata_fallback']),
             },
             'output_dir': str(final_dir)
@@ -421,12 +430,16 @@ class LabelPipeline:
                 new_path = images_dir / new_filename
                 resized.save(new_path)
 
+                # Map string values to integers
+                goal_int = GOAL_MAP.get(item['v_Goal'], GOAL_MAP['default'])
+                format_int = FORMAT_MAP.get(item['v_Format'], FORMAT_MAP['default'])
+
                 # Create clean metadata
                 clean_meta = {
                     'filename': new_filename,
-                    'image_path': str(new_path),
-                    'v_Goal': item['v_Goal'],
-                    'v_Format': item['v_Format'],
+                    'image_path': str(new_path.relative_to(output_dir)),
+                    'v_Goal': goal_int,
+                    'v_Format': format_int,
                     'v_Tone': item['v_Tone'],
                     'source': item['source'],
                     'original_url': item.get('original_url', ''),
